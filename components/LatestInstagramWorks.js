@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
-import { Instagram, ExternalLink, Loader2 } from 'lucide-react';
+import { Instagram, ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const latestWorks = [
@@ -79,15 +79,15 @@ export default function LatestInstagramWorks() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 24 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] },
     },
     hover: {
       y: -8,
-      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -97,9 +97,7 @@ export default function LatestInstagramWorks() {
         <div className="container-custom">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
-              <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-                Latest Works
-              </span>
+              <span className="section-label">Latest Works</span>
               <h2 className="section-title">Fresh from Instagram</h2>
             </div>
             <a
@@ -115,28 +113,28 @@ export default function LatestInstagramWorks() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Latest Instagram works">
             {latestWorks.map((work) => (
-              <article key={work.id} className="group glass-card-hover rounded-2xl overflow-hidden" role="listitem">
+              <article key={work.id} className="group brutal-card-hover rounded-none overflow-hidden" role="listitem">
                 <div className="relative aspect-square overflow-hidden">
                   <Image
                     src={work.image}
                     alt={work.title}
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 ease-spring group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     quality={85}
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-spring">
                     <div className="flex items-center justify-between">
-                      <span className="px-2 py-1 bg-primary-accent/90 backdrop-blur-sm rounded-full text-xs font-nav text-text uppercase tracking-wider">
+                      <span className="category-badge">
                         {work.category}
                       </span>
                       <a
                         href="https://instagram.com/ushaswi_014"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 bg-black/50 backdrop-blur-sm rounded-full text-text-muted hover:text-text transition-colors"
+                        className="p-2 bg-black/50 backdrop-blur-sm rounded-none text-text-muted hover:text-surface transition-colors"
                         aria-label={`View ${work.title} on Instagram`}
                       >
                         <ExternalLink size={16} />
@@ -145,7 +143,7 @@ export default function LatestInstagramWorks() {
                   </div>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-heading text-lg text-text mb-3 group-hover:text-primary-accent transition-colors">{work.title}</h3>
+                  <h3 className="font-heading text-lg text-text mb-3 group-hover:text-primary-accent transition-colors duration-fast">{work.title}</h3>
                   <div className="flex items-center gap-4 text-sm text-text-muted">
                     <span className="flex items-center gap-1">
                       <span aria-hidden="true">♥</span>
@@ -173,12 +171,10 @@ export default function LatestInstagramWorks() {
           className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <div>
-            <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-              Latest Works
-            </span>
+            <span className="section-label">Latest Works</span>
             <h2 className="section-title">Fresh from Instagram</h2>
           </div>
           <a
@@ -208,7 +204,7 @@ export default function LatestInstagramWorks() {
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className="group glass-card-hover rounded-2xl overflow-hidden"
+              className="group brutal-card-hover rounded-none overflow-hidden"
               role="listitem"
             >
               <div className="relative aspect-square overflow-hidden">
@@ -216,22 +212,22 @@ export default function LatestInstagramWorks() {
                   src={work.image}
                   alt={work.title}
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 ease-spring group-hover:scale-105"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   quality={85}
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-spring">
                   <div className="flex items-center justify-between">
-                    <span className="px-2 py-1 bg-primary-accent/90 backdrop-blur-sm rounded-full text-xs font-nav text-text uppercase tracking-wider">
+                    <span className="category-badge">
                       {work.category}
                     </span>
                     <a
                       href="https://instagram.com/ushaswi_014"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 bg-black/50 backdrop-blur-sm rounded-full text-text-muted hover:text-text transition-colors"
+                      className="p-2 bg-black/50 backdrop-blur-sm rounded-none text-text-muted hover:text-surface transition-colors"
                       aria-label={`View ${work.title} on Instagram`}
                     >
                       <ExternalLink size={16} />
@@ -240,7 +236,7 @@ export default function LatestInstagramWorks() {
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="font-heading text-lg text-text mb-3 group-hover:text-primary-accent transition-colors">{work.title}</h3>
+                <h3 className="font-heading text-lg text-text mb-3 group-hover:text-primary-accent transition-colors duration-fast">{work.title}</h3>
                 <div className="flex items-center gap-4 text-sm text-text-muted">
                   <span className="flex items-center gap-1">
                     <span aria-hidden="true">♥</span>

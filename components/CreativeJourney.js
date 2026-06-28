@@ -2,7 +2,6 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
-import { artworks } from '@/data/artworks';
 import { useEffect, useState } from 'react';
 
 const journeyMilestones = [
@@ -62,16 +61,16 @@ export default function CreativeJourney() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: prefersReduced ? 0 : 0.15 },
+      transition: { staggerChildren: prefersReduced ? 0 : 0.12 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 32 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: prefersReduced ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -80,31 +79,29 @@ export default function CreativeJourney() {
       <section id="creative-journey" className="section bg-surface" aria-hidden="true">
         <div className="container-custom">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-              Creative Journey
-            </span>
+            <span className="section-label">Creative Journey</span>
             <h2 className="section-title mb-4">The Path So Far</h2>
             <p className="section-subtitle">
               A visual timeline of artistic growth—from tentative first lines to confident multi-medium practice.
             </p>
           </div>
           <div className="relative">
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border-light -translate-x-1/2" aria-hidden="true" />
-            <div className="space-y-16">
+            <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border -translate-x-1/2" aria-hidden="true" />
+            <div className="space-y-12">
               {journeyMilestones.map((milestone, index) => (
-<div
-                    key={milestone.year}
-                    className="relative flex items-start gap-8"
-                  >
-                  <div className="flex-1 max-w-md p-6 glass-card rounded-2xl">
-                    <span className className="inline-block px-3 py-1 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-xs font-nav text-primary-accent mb-3">
+                <div
+                  key={milestone.year}
+                  className="relative flex items-start gap-8"
+                >
+                  <div className="flex-1 max-w-md p-6 brutal-card rounded-none">
+                    <span className="category-badge mb-3 inline-block">
                       {milestone.category}
                     </span>
                     <h3 className="font-heading text-xl text-text mb-2">{milestone.title}</h3>
                     <p className="text-text-muted leading-relaxed">{milestone.description}</p>
                   </div>
-                  <div className="relative flex-shrink-0 w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center z-10 border-4 border-surface">
-                    <span className="font-heading text-lg text-text">{milestone.year}</span>
+                  <div className="relative flex-shrink-0 w-16 h-16 rounded-none bg-primary-accent flex items-center justify-center z-10 border-4 border-surface shadow-brutal-primary">
+                    <span className="font-heading text-lg text-surface">{milestone.year}</span>
                   </div>
                 </div>
               ))}
@@ -120,13 +117,11 @@ export default function CreativeJourney() {
       <div className="container-custom">
         <motion.div
           className="text-center max-w-2xl mx-auto mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-            Creative Journey
-          </span>
+          <span className="section-label">Creative Journey</span>
           <h2 className="section-title mb-4">The Path So Far</h2>
           <p className="section-subtitle">
             A visual timeline of artistic growth—from tentative first lines to confident multi-medium practice.
@@ -139,8 +134,8 @@ export default function CreativeJourney() {
           initial="hidden"
           animate="visible"
         >
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border-light -translate-x-1/2" aria-hidden="true" />
-          <div className="space-y-16">
+          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-border -translate-x-1/2" aria-hidden="true" />
+          <div className="space-y-12">
             {journeyMilestones.map((milestone, index) => (
               <motion.div
                 key={milestone.year}
@@ -149,12 +144,12 @@ export default function CreativeJourney() {
                 className="relative flex items-start gap-8"
               >
                 <motion.div
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+                  initial={{ opacity: 0, x: index % 2 === 0 ? -32 : 32 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="flex-1 max-w-md p-6 glass-card rounded-2xl"
+                  transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex-1 max-w-md p-6 brutal-card rounded-none"
                 >
-                  <span className="inline-block px-3 py-1 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-xs font-nav text-primary-accent mb-3">
+                  <span className="category-badge mb-3 inline-block">
                     {milestone.category}
                   </span>
                   <h3 className="font-heading text-xl text-text mb-2">{milestone.title}</h3>
@@ -163,10 +158,10 @@ export default function CreativeJourney() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: prefersReduced ? 0 : 0.3, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-                  className="relative flex-shrink-0 w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center z-10 border-4 border-surface"
+                  transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                  className="relative flex-shrink-0 w-16 h-16 rounded-none bg-primary-accent flex items-center justify-center z-10 border-4 border-surface shadow-brutal-primary"
                 >
-                  <span className="font-heading text-lg text-text">{milestone.year}</span>
+                  <span className="font-heading text-lg text-surface">{milestone.year}</span>
                 </motion.div>
               </motion.div>
             ))}

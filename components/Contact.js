@@ -72,24 +72,22 @@ export default function Contact() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 24 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
   if (!mounted) {
     return (
-      <section id="contact" className="section bg-background" aria-hidden="true">
+      <section id="contact" className="section bg-surface" aria-hidden="true">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             <div>
               <div className="mb-10">
-                <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-                  Get In Touch
-                </span>
+                <span className="section-label">Get In Touch</span>
                 <h2 className="section-title mb-4">Let's Create Together</h2>
                 <p className="section-subtitle max-w-lg">
                   Whether you're interested in a commission, collaboration, or simply want to say hello—I'd love to hear from you. Every great project starts with a conversation.
@@ -102,9 +100,9 @@ export default function Contact() {
                   {commissionInfo.map((item, index) => (
                     <div
                       key={item.title}
-                      className="flex gap-4 p-4 glass-card rounded-xl hover:border-primary-accent/30 transition-all duration-fast"
+                      className="flex gap-4 p-4 brutal-card rounded-none hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast ease-spring"
                     >
-                      <div className="w-10 h-10 rounded-lg bg-primary-accent/15 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center flex-shrink-0">
                         <item.icon size={20} className="text-primary-accent" aria-hidden="true" />
                       </div>
                       <div>
@@ -116,7 +114,7 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="pt-8 border-t border-border-light">
+              <div className="pt-8 border-t border-border">
                 <h3 className="font-heading text-xl text-text mb-6">Connect</h3>
                 <div className="flex flex-wrap gap-3">
                   {socialLinks.map((social) => (
@@ -125,7 +123,7 @@ export default function Contact() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-3 glass-card rounded-xl text-text-muted hover:text-text hover:border-primary-accent/30 hover:bg-primary-accent/5 transition-all duration-fast group"
+                      className="flex items-center gap-2 px-4 py-3 brutal-card rounded-none text-text-muted hover:text-text hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast group"
                       aria-label={social.label}
                     >
                       <social.icon size={20} className="group-hover:text-primary-accent transition-colors" aria-hidden="true" />
@@ -137,7 +135,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <div className="glass-card p-8 lg:p-10 rounded-2xl sticky top-24">
+              <div className="brutal-card p-8 lg:p-10 rounded-none sticky top-24">
                 <h3 className="font-heading text-xl text-text mb-8">Send a Message</h3>
                 
                 <form onSubmit={handleSubmit} className="space-y-6" noValidate>
@@ -152,7 +150,7 @@ export default function Contact() {
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={`input-field ${errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                        className={`input-field ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
                         placeholder="John Doe"
                         aria-invalid={errors.name ? 'true' : 'false'}
                         aria-describedby={errors.name ? 'name-error' : undefined}
@@ -173,7 +171,7 @@ export default function Contact() {
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                        className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
                         placeholder="john@example.com"
                         aria-invalid={errors.email ? 'true' : 'false'}
                         aria-describedby={errors.email ? 'email-error' : undefined}
@@ -194,7 +192,7 @@ export default function Contact() {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      className={`input-field ${errors.subject ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                      className={`input-field ${errors.subject ? 'border-red-500 focus:border-red-500' : ''}`}
                       aria-invalid={errors.subject ? 'true' : 'false'}
                       aria-describedby={errors.subject ? 'subject-error' : undefined}
                       disabled={status === 'submitting'}
@@ -222,7 +220,7 @@ export default function Contact() {
                       value={formData.message}
                       onChange={handleChange}
                       rows={5}
-                      className={`input-field resize-y min-h-[120px] ${errors.message ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                      className={`input-field resize-y min-h-[120px] ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
                       placeholder="Tell me about your project, idea, or just say hello..."
                       aria-invalid={errors.message ? 'true' : 'false'}
                       aria-describedby={errors.message ? 'message-error' : undefined}
@@ -272,19 +270,17 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="section bg-background" suppressHydrationWarning>
+    <section id="contact" className="section bg-surface" suppressHydrationWarning>
       <div className="container-custom">
         <motion.div
-          className="grid lg:grid-cols-2 gap-12 lg:gap-20"
+          className="grid lg:grid-cols-2 gap-12 lg:gap-16"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           <div>
             <motion.div variants={itemVariants} className="mb-10">
-              <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-                Get In Touch
-              </span>
+              <span className="section-label">Get In Touch</span>
               <h2 className="section-title mb-4">Let's Create Together</h2>
               <p className="section-subtitle max-w-lg">
                 Whether you're interested in a commission, collaboration, or simply want to say hello—I'd love to hear from you. Every great project starts with a conversation.
@@ -299,10 +295,10 @@ export default function Contact() {
                     key={item.title}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: prefersReduced ? 0 : 0.2 + index * 0.1, duration: 0.5 }}
-                    className="flex gap-4 p-4 glass-card rounded-xl hover:border-primary-accent/30 transition-all duration-fast"
+                    transition={{ delay: prefersReduced ? 0 : 0.2 + index * 0.1, duration: 0.4 }}
+                    className="flex gap-4 p-4 brutal-card rounded-none hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast ease-spring"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary-accent/15 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center flex-shrink-0">
                       <item.icon size={20} className="text-primary-accent" aria-hidden="true" />
                     </div>
                     <div>
@@ -314,7 +310,7 @@ export default function Contact() {
               </div>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="pt-8 border-t border-border-light">
+            <motion.div variants={itemVariants} className="pt-8 border-t border-border">
               <h3 className="font-heading text-xl text-text mb-6">Connect</h3>
               <div className="flex flex-wrap gap-3">
                 {socialLinks.map((social) => (
@@ -323,7 +319,7 @@ export default function Contact() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-4 py-3 glass-card rounded-xl text-text-muted hover:text-text hover:border-primary-accent/30 hover:bg-primary-accent/5 transition-all duration-fast group"
+                    className="flex items-center gap-2 px-4 py-3 brutal-card rounded-none text-text-muted hover:text-text hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast group"
                     aria-label={social.label}
                   >
                     <social.icon size={20} className="group-hover:text-primary-accent transition-colors" aria-hidden="true" />
@@ -335,7 +331,7 @@ export default function Contact() {
           </div>
 
           <motion.div variants={itemVariants}>
-            <div className="glass-card p-8 lg:p-10 rounded-2xl sticky top-24">
+            <div className="brutal-card p-8 lg:p-10 rounded-none sticky top-24">
               <h3 className="font-heading text-xl text-text mb-8">Send a Message</h3>
               
               <form onSubmit={handleSubmit} className="space-y-6" noValidate>
@@ -350,7 +346,7 @@ export default function Contact() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className={`input-field ${errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                      className={`input-field ${errors.name ? 'border-red-500 focus:border-red-500' : ''}`}
                       placeholder="John Doe"
                       aria-invalid={errors.name ? 'true' : 'false'}
                       aria-describedby={errors.name ? 'name-error' : undefined}
@@ -371,7 +367,7 @@ export default function Contact() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                      className={`input-field ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
                       placeholder="john@example.com"
                       aria-invalid={errors.email ? 'true' : 'false'}
                       aria-describedby={errors.email ? 'email-error' : undefined}
@@ -392,7 +388,7 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`input-field ${errors.subject ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                    className={`input-field ${errors.subject ? 'border-red-500 focus:border-red-500' : ''}`}
                     aria-invalid={errors.subject ? 'true' : 'false'}
                     aria-describedby={errors.subject ? 'subject-error' : undefined}
                     disabled={status === 'submitting'}
@@ -420,7 +416,7 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     rows={5}
-                    className={`input-field resize-y min-h-[120px] ${errors.message ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                    className={`input-field resize-y min-h-[120px] ${errors.message ? 'border-red-500 focus:border-red-500' : ''}`}
                     placeholder="Tell me about your project, idea, or just say hello..."
                     aria-invalid={errors.message ? 'true' : 'false'}
                     aria-describedby={errors.message ? 'message-error' : undefined}

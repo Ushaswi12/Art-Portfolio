@@ -40,12 +40,12 @@ export default function Footer() {
 
   if (!mounted) {
     return (
-      <footer className="bg-surface border-t border-border-light" role="contentinfo" aria-hidden="true">
+      <footer className="bg-surface border-t border-border" role="contentinfo" aria-hidden="true">
         <div className="container-custom">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 py-12 lg:py-16">
             <div className="lg:col-span-2">
-              <Link href="#hero" className="font-heading text-2xl font-semibold text-text mb-4 block" aria-label="Ushaswi Home">
-                Ushaswi
+              <Link href="#hero" className="font-heading text-2xl font-bold text-text mb-4 block" aria-label="Ushaswi Potlapally Home">
+                Ushaswi Potlapally
               </Link>
               <p className="text-text-muted max-w-xs mb-6 leading-relaxed">
                 Artist | DIY Crafts | Sketch | Handmade Art | Mini Crafts | India
@@ -57,7 +57,7 @@ export default function Footer() {
                     href={footerLinks.connect.find(l => l.label === name)?.href || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-full bg-surface-elevated border border-border-light flex items-center justify-center text-text-muted hover:text-primary-accent hover:border-primary-accent/30 transition-all duration-fast"
+                    className="w-10 h-10 rounded-none bg-surface-elevated border-brutal border-border flex items-center justify-center text-text-muted hover:text-primary-accent hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast"
                     aria-label={`Follow on ${name}`}
                   >
                     <Icon size={18} aria-hidden="true" />
@@ -123,9 +123,9 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-border-light flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="pt-8 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-caption text-text-subtle">
-              &copy; {currentYear} Ushaswi. All rights reserved.
+              &copy; {currentYear} Ushaswi Potlapally. All rights reserved.
             </p>
             
             <div className="flex items-center gap-4 text-caption text-text-subtle">
@@ -140,17 +140,17 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-surface border-t border-border-light" role="contentinfo" suppressHydrationWarning>
+    <footer className="bg-surface border-t border-border" role="contentinfo" suppressHydrationWarning>
       <div className="container-custom">
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 py-12 lg:py-16"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: prefersReduced ? 0 : 0.6, staggerChildren: prefersReduced ? 0 : 0.1 }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, staggerChildren: prefersReduced ? 0 : 0.08 }}
         >
           <motion.div className="lg:col-span-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Link href="#hero" className="font-heading text-2xl font-semibold text-text mb-4 block" aria-label="Ushaswi Home">
-              Ushaswi
+            <Link href="#hero" className="font-heading text-2xl font-bold text-text mb-4 block" aria-label="Ushaswi Potlapally Home">
+              Ushaswi Potlapally
             </Link>
             <p className="text-text-muted max-w-xs mb-6 leading-relaxed">
               Artist | DIY Crafts | Sketch | Handmade Art | Mini Crafts | India
@@ -162,7 +162,7 @@ export default function Footer() {
                   href={footerLinks.connect.find(l => l.label === name)?.href || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-surface-elevated border border-border-light flex items-center justify-center text-text-muted hover:text-primary-accent hover:border-primary-accent/30 transition-all duration-fast"
+                  className="w-10 h-10 rounded-none bg-surface-elevated border-brutal border-border flex items-center justify-center text-text-muted hover:text-primary-accent hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast"
                   aria-label={`Follow on ${name}`}
                 >
                   <Icon size={18} aria-hidden="true" />
@@ -226,16 +226,17 @@ export default function Footer() {
               </ul>
             </nav>
           </motion.div>
+
         </motion.div>
 
         <motion.div
-          className="pt-8 border-t border-border-light flex flex-col md:flex-row md:items-center md:justify-between gap-4"
-          initial={{ opacity: 0, y: 20 }}
+          className="pt-8 border-t border-border flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: prefersReduced ? 0 : 0.4 }}
+          transition={{ delay: prefersReduced ? 0 : 0.3 }}
         >
           <p className="text-caption text-text-subtle">
-            &copy; {currentYear} Ushaswi. All rights reserved.
+            &copy; {currentYear} Ushaswi Potlapally. All rights reserved.
           </p>
           
           <div className="flex items-center gap-4 text-caption text-text-subtle">

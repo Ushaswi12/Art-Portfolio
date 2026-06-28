@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Loader2, Lock, Unlock, Settings, Image as LucideImage, Plus, Trash2, GripVertical, Save, X, LogOut } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock, Unlock, Settings, Image as LucideImage, Plus, Trash2, GripVertical, Save, X, LogOut, Download } from 'lucide-react';
 import Image from 'next/image';
 
 const ADMIN_PASSWORD = 'ushaswi2024';
@@ -449,10 +449,10 @@ export default function AdminPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md glass-card p-8 rounded-2xl"
+          className="w-full max-w-md brutal-card p-8"
         >
           <div className="text-center mb-8">
-            <h1 className="font-heading text-3xl text-text mb-2">Admin Access</h1>
+            <h1 className="font-heading text-3xl font-bold text-text mb-2">Admin Access</h1>
             <p className="text-text-muted">Enter password to manage portfolio</p>
           </div>
           
@@ -497,7 +497,7 @@ export default function AdminPage() {
           </form>
           
           <p className="text-center text-caption text-text-subtle mt-6">
-            This page is hidden. Bookmark <code className="bg-surface-elevated px-1.5 py-0.5 rounded text-xs">/sonu</code> for access.
+            This page is hidden. Bookmark <code className="bg-surface-elevated px-1.5 py-0.5 rounded-none text-xs border-brutal border-border">/sonu</code> for access.
           </p>
         </motion.div>
       </div>
@@ -508,11 +508,11 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="bg-surface border-b border-border-light sticky top-0 z-40">
+      <header className="bg-surface border-b border-border sticky top-0 z-40">
         <div className="container-custom flex items-center justify-between h-16">
-          <h1 className="font-heading text-xl text-text flex items-center gap-3">
+          <h1 className="font-heading text-xl font-bold text-text flex items-center gap-3">
             <Settings size={24} className="text-primary-accent" />
-            Admin Panel
+            Admin Panel — Ushaswi Potlapally
           </h1>
           <div className="flex items-center gap-4">
             <button
@@ -536,8 +536,8 @@ export default function AdminPage() {
       <main className="container-custom py-8">
         <div className="grid lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="glass-card p-6 rounded-2xl">
-              <h2 className="font-heading text-lg text-text mb-4 flex items-center gap-2">
+            <div className="brutal-card p-6">
+              <h2 className="font-heading text-lg font-bold text-text mb-4 flex items-center gap-2">
                 {editingId ? 'Edit Artwork' : 'Add New Artwork'}
                 <span className="text-caption text-text-muted">({artworks.length} total)</span>
               </h2>
@@ -630,7 +630,7 @@ export default function AdminPage() {
                       type="checkbox"
                       checked={formData.featured}
                       onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                      className="w-4 h-4 rounded border-border-light text-primary-accent focus:ring-primary-accent"
+                      className="w-4 h-4 rounded-none border-brutal border-border text-primary-accent focus:ring-primary-accent"
                     />
                     <span className="text-sm text-text">Featured in Hero/Featured section</span>
                   </label>
@@ -643,8 +643,8 @@ export default function AdminPage() {
                     onDragLeave={handleDrag}
                     onDragOver={handleDrag}
                     onDrop={handleDrop}
-                    className={`relative aspect-video rounded-xl border-2 border-dashed ${
-                      dragActive ? 'border-primary-accent bg-primary-accent/5' : 'border-border-light'
+                    className={`relative aspect-video rounded-none border-4 border-dashed ${
+                      dragActive ? 'border-primary-accent bg-primary-accent/5' : 'border-border'
                     } overflow-hidden cursor-pointer transition-colors`}
                   >
                     <input
@@ -672,7 +672,7 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4 border-t border-border-light">
+                <div className="flex gap-4 pt-4 border-t border-border">
                   {editingId ? (
                     <>
                       <button
@@ -707,10 +707,10 @@ export default function AdminPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="glass-card p-6 rounded-2xl sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
-              <h2 className="font-heading text-lg text-text mb-4 flex items-center justify-between">
+            <div className="brutal-card p-6 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
+              <h2 className="font-heading text-lg font-bold text-text mb-4 flex items-center justify-between">
                 All Artworks
-                <span className="text-caption text-text-muted bg-surface-elevated px-2 py-0.5 rounded">
+                <span className="text-caption text-text-muted bg-surface-elevated px-2 py-0.5 rounded-none border-brutal border-border">
                   {artworks.length}
                 </span>
               </h2>
@@ -722,9 +722,9 @@ export default function AdminPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.05 * index }}
-                    className={`p-3 rounded-xl transition-all ${
+                    className={`p-3 rounded-none transition-all ${
                       editingId === artwork.id 
-                        ? 'bg-primary-accent/10 border border-primary-accent/30' 
+                        ? 'bg-primary-accent/5 border-brutal border-primary-accent' 
                         : 'hover:bg-surface-elevated'
                     }`}
                   >
@@ -748,7 +748,7 @@ export default function AdminPage() {
                         </button>
                       </div>
                       
-                      <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="relative w-16 h-12 rounded-none overflow-hidden flex-shrink-0 brutal-card">
                         <Image
                           src={artwork.thumbUrl || artwork.imageUrl}
                           alt=""
@@ -769,14 +769,14 @@ export default function AdminPage() {
                       <div className="flex items-center gap-1">
                         <button
                           onClick={() => startEdit(artwork)}
-                          className="p-1.5 text-text-muted hover:text-primary-accent rounded"
+                          className="p-1.5 text-text-muted hover:text-primary-accent rounded-none hover:bg-surface-elevated transition-colors"
                           aria-label="Edit"
                         >
                           <Settings size={14} />
                         </button>
                         <button
                           onClick={() => deleteArtwork(artwork.id)}
-                          className="p-1.5 text-text-muted hover:text-red-400 rounded"
+                          className="p-1.5 text-text-muted hover:text-red-400 rounded-none hover:bg-surface-elevated transition-colors"
                           aria-label="Delete"
                         >
                           <Trash2 size={14} />

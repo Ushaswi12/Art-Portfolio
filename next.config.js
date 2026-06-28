@@ -19,6 +19,7 @@ const nextConfig = {
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
+  optimizeFonts: true,
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

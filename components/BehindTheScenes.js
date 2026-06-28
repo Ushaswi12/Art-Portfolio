@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
-import { Play, Video, Image as ImageIcon, Zap, Loader2 } from 'lucide-react';
+import { Play, Video } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const behindTheScenes = [
@@ -79,15 +79,15 @@ export default function BehindTheScenes() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 24 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] },
     },
     hover: {
       y: -8,
-      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -96,9 +96,7 @@ export default function BehindTheScenes() {
       <section id="behind-scenes" className="section bg-background" aria-hidden="true">
         <div className="container-custom">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-              Behind the Scenes
-            </span>
+            <span className="section-label">Behind the Scenes</span>
             <h2 className="section-title mb-4">Process in Motion</h2>
             <p className="section-subtitle">
               Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.
@@ -106,35 +104,36 @@ export default function BehindTheScenes() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Behind the scenes videos">
             {behindTheScenes.map((item) => (
-              <article key={item.id} className="group glass-card-hover rounded-2xl overflow-hidden" role="listitem">
+              <article key={item.id} className="group brutal-card-hover rounded-none overflow-hidden" role="listitem">
                 <div className="relative aspect-video overflow-hidden">
                   <Image
                     src={item.thumbnail}
                     alt=""
                     fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-500 ease-spring group-hover:scale-105"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     quality={85}
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="w-16 h-16 rounded-full bg-primary-accent flex items-center justify-center text-text"
+                      whileTap={{ scale: 0.9 }}
+                      className="w-14 h-14 rounded-none bg-primary-accent flex items-center justify-center text-surface border-4 border-border shadow-brutal-primary"
                       aria-label={`Watch ${item.title}`}
                     >
-                      <Play size={28} className="ml-1" aria-hidden="true" />
+                      <Play size={32} className="ml-1" aria-hidden="true" />
                     </motion.button>
                   </div>
-                  <div className="absolute bottom-3 right-3 bg-black/80 text-text text-xs px-2 py-1 rounded font-nav">
+                  <div className="absolute bottom-3 right-3 bg-black/80 text-surface text-xs px-2 py-1 rounded-none font-nav">
                     {item.duration}
                   </div>
-                  <div className="absolute top-3 left-3 bg-primary-accent/90 text-text text-xs px-2 py-1 rounded font-nav">
+                  <div className="absolute top-3 left-3 bg-primary-accent text-surface text-xs px-2 py-1 rounded-none font-nav">
                     {item.category}
                   </div>
                 </div>
                 <div className="p-5">
-                  <h3 className="font-heading text-lg text-text mb-2 group-hover:text-primary-accent transition-colors">{item.title}</h3>
+                  <h3 className="font-heading text-lg text-text mb-2 group-hover:text-primary-accent transition-colors duration-fast">{item.title}</h3>
                   <p className="text-sm text-text-muted">{item.description}</p>
                 </div>
               </article>
@@ -156,13 +155,11 @@ export default function BehindTheScenes() {
       <div className="container-custom">
         <motion.div
           className="text-center max-w-2xl mx-auto mb-12"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-            Behind the Scenes
-          </span>
+          <span className="section-label">Behind the Scenes</span>
           <h2 className="section-title mb-4">Process in Motion</h2>
           <p className="section-subtitle">
             Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.
@@ -185,7 +182,7 @@ export default function BehindTheScenes() {
               initial="hidden"
               animate="visible"
               whileHover="hover"
-              className="group glass-card-hover rounded-2xl overflow-hidden cursor-pointer"
+              className="group brutal-card-hover rounded-none overflow-hidden cursor-pointer"
               role="listitem"
             >
               <div className="relative aspect-video overflow-hidden">
@@ -193,30 +190,30 @@ export default function BehindTheScenes() {
                   src={item.thumbnail}
                   alt=""
                   fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 ease-spring group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   quality={85}
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <motion.button
                     whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-16 h-16 rounded-full bg-primary-accent flex items-center justify-center text-text"
+                    whileTap={{ scale: 0.9 }}
+                    className="w-14 h-14 rounded-none bg-primary-accent flex items-center justify-center text-surface border-4 border-border shadow-brutal-primary"
                     aria-label={`Watch ${item.title}`}
                   >
-                    <Play size={28} className="ml-1" aria-hidden="true" />
+                    <Play size={32} className="ml-1" aria-hidden="true" />
                   </motion.button>
                 </div>
-                <div className="absolute bottom-3 right-3 bg-black/80 text-text text-xs px-2 py-1 rounded font-nav">
+                <div className="absolute bottom-3 right-3 bg-black/80 text-surface text-xs px-2 py-1 rounded-none font-nav">
                   {item.duration}
                 </div>
-                <div className="absolute top-3 left-3 bg-primary-accent/90 text-text text-xs px-2 py-1 rounded font-nav">
+                <div className="absolute top-3 left-3 bg-primary-accent text-surface text-xs px-2 py-1 rounded-none font-nav">
                   {item.category}
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="font-heading text-lg text-text mb-2 group-hover:text-primary-accent transition-colors">{item.title}</h3>
+                <h3 className="font-heading text-lg text-text mb-2 group-hover:text-primary-accent transition-colors duration-fast">{item.title}</h3>
                 <p className="text-sm text-text-muted">{item.description}</p>
               </div>
             </motion.article>
@@ -225,9 +222,9 @@ export default function BehindTheScenes() {
 
         <motion.div
           className="text-center mt-10"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: prefersReduced ? 0 : 0.6, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <a href="https://instagram.com/ushaswi_014/reels" target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex">
             View All Reels on Instagram

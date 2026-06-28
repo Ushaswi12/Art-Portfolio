@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import Image from 'next/image';
 import { Palette, Brush, Layers, Award, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -36,33 +37,31 @@ export default function About() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 24 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
   const statVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
+    hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
   if (!mounted) {
     return (
-      <section id="about" className="section bg-background" aria-hidden="true">
+      <section id="about" className="section bg-surface" aria-hidden="true">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div>
               <div className="sticky top-24">
-                <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-6">
-                  About the Artist
-                </span>
+                <span className="section-label">About the Artist</span>
                 <h2 className="section-title mb-6">Where Vision Meets Canvas</h2>
                 <div className="prose prose-lg prose-invert max-w-none text-text-muted leading-relaxed mb-8">
                   <p className="mb-6 text-lg">
@@ -90,9 +89,8 @@ export default function About() {
               </div>
             </div>
             <div className="relative">
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/20 via-transparent to-secondary-accent/20" aria-hidden="true" />
-                <div className="absolute inset-0 bg-grid-pattern opacity-5" aria-hidden="true" />
+              <div className="relative aspect-[3/4] rounded-none brutal-card overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/10 via-transparent to-secondary-accent/10" aria-hidden="true" />
                 <div className="relative h-full flex items-center justify-center p-8">
                   <div className="max-w-md text-center">
                     <blockquote className="text-xl lg:text-2xl font-light text-text leading-relaxed mb-8 relative">
@@ -101,7 +99,7 @@ export default function About() {
                       The canvas is a mirror, and every viewer brings their own reflection.
                       <span className="text-4xl text-primary-accent/50 font-heading" aria-hidden="true">"</span>
                     </blockquote>
-                    <cite className="text-text-muted">— Ushaswi, Studio Journal 2024</cite>
+                    <cite className="text-text-muted">— Ushaswi Potlapally, Studio Journal 2024</cite>
                   </div>
                 </div>
               </div>
@@ -113,10 +111,10 @@ export default function About() {
   }
 
   return (
-    <section id="about" className="section bg-background" suppressHydrationWarning>
+    <section id="about" className="section bg-surface" suppressHydrationWarning>
       <div className="container-custom">
         <motion.div
-          className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start"
+          className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -126,15 +124,13 @@ export default function About() {
               variants={itemVariants}
               className="sticky top-24"
             >
-              <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-6">
-                About the Artist
-              </span>
+              <span className="section-label">About the Artist</span>
               <h2 className="section-title mb-6">Where Vision Meets Canvas</h2>
               
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.6 }}
+                transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.5 }}
                 className="prose prose-lg prose-invert max-w-none text-text-muted leading-relaxed mb-8"
               >
                 <p className="mb-6 text-lg">
@@ -163,7 +159,7 @@ export default function About() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: prefersReduced ? 0 : 0.4, duration: 0.6 }}
+                transition={{ delay: prefersReduced ? 0 : 0.4, duration: 0.5 }}
                 className="grid grid-cols-2 gap-4 mb-10"
               >
                 {mediums.map((medium, index) => (
@@ -171,10 +167,10 @@ export default function About() {
                     key={medium.name}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: prefersReduced ? 0 : 0.4 + index * 0.1, duration: 0.5 }}
-                    className="p-5 glass-card rounded-xl group hover:border-primary-accent/30 transition-all duration-fast"
+                    transition={{ delay: prefersReduced ? 0 : 0.4 + index * 0.08, duration: 0.4 }}
+                    className="p-5 brutal-card rounded-none group hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast ease-spring"
                   >
-                    <div className="w-10 h-10 rounded-lg bg-primary-accent/15 flex items-center justify-center mb-3 group-hover:bg-primary-accent/30 transition-colors">
+                    <div className="w-10 h-10 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center mb-3 group-hover:bg-primary-accent/20 transition-colors">
                       <medium.icon size={22} className="text-primary-accent" aria-hidden="true" />
                     </div>
                     <h4 className="font-heading text-lg text-text mb-2">{medium.name}</h4>
@@ -194,9 +190,9 @@ export default function About() {
                     key={stat.label}
                     variants={statVariants}
                     custom={index}
-                    className="text-center p-6 glass-card rounded-xl"
+                    className="text-center p-6 brutal-card rounded-none"
                   >
-                    <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-primary-accent/15 flex items-center justify-center">
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center">
                       <stat.icon size={24} className="text-primary-accent" aria-hidden="true" />
                     </div>
                     <div className="font-heading text-3xl lg:text-4xl font-bold text-text mb-1">{stat.value}</div>
@@ -211,9 +207,8 @@ export default function About() {
             variants={itemVariants}
             className="relative"
           >
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/20 via-transparent to-secondary-accent/20" aria-hidden="true" />
-              <div className="absolute inset-0 bg-grid-pattern opacity-5" aria-hidden="true" />
+            <div className="relative aspect-[3/4] rounded-none brutal-card overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/10 via-transparent to-secondary-accent/10" aria-hidden="true" />
               
               <div className="relative h-full flex items-center justify-center p-8">
                 <div className="max-w-md text-center">
@@ -223,15 +218,15 @@ export default function About() {
                     The canvas is a mirror, and every viewer brings their own reflection.
                     <span className="text-4xl text-primary-accent/50 font-heading" aria-hidden="true">"</span>
                   </blockquote>
-                  <cite className="text-text-muted">— Ushaswi, Studio Journal 2024</cite>
+                  <cite className="text-text-muted">— Ushaswi Potlapally, Studio Journal 2024</cite>
                 </div>
               </div>
 
               <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3 justify-center">
-                {['Acrylic', 'Watercolor', 'GraphiteGraphite', 'Charcoal', 'Macramé', 'Polymer Clay', 'Resin', 'Ceramics'].map((tag) => (
+                {['Acrylic', 'Watercolor', 'Graphite', 'Charcoal', 'Macramé', 'Polymer Clay', 'Resin', 'Ceramics'].map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1.5 text-xs font-nav bg-surface/50 backdrop-blur-sm border border-border-light rounded-full text-text-muted hover:text-text hover:border-border transition-all duration-fast"
+                    className="px-3 py-1.5 text-xs font-nav bg-surface border-brutal border-border rounded-none text-text-muted hover:text-text hover:border-primary-accent hover:shadow-brutal-primary transition-all duration-fast"
                   >
                     {tag}
                   </span>
@@ -242,10 +237,10 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.6 }}
-              className="absolute -bottom-6 -right-6 lg:-bottom-8 lg:-right-8 w-48 h-48 lg:w-64 lg:h-64 rounded-2xl overflow-hidden glass-card shadow-xl"
+              transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.5 }}
+              className="absolute -bottom-8 -right-8 lg:-bottom-10 lg:-right-10 w-52 h-52 lg:w-72 lg:h-72 rounded-none brutal-card overflow-hidden shadow-brutal-lg"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary-accent/30 to-secondary-accent/30" aria-hidden="true" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary-accent/20 to-secondary-accent/20" aria-hidden="true" />
               <div className="relative h-full flex items-end p-6">
                 <div>
                   <p className="text-caption text-text-muted uppercase tracking-wider mb-1">Current Focus</p>

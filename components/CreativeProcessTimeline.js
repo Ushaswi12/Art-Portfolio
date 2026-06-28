@@ -98,16 +98,16 @@ export default function CreativeProcessTimeline() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: prefersReduced ? 0 : 0.15 },
+      transition: { staggerChildren: prefersReduced ? 0 : 0.12 },
     },
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -40 },
+    hidden: { opacity: 0, x: -32 },
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: prefersReduced ? 0 : 0.7, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] },
     },
   };
 
@@ -116,9 +116,7 @@ export default function CreativeProcessTimeline() {
       <section id="creative-timeline" className="section bg-surface" aria-hidden="true">
         <div className="container-custom">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-              Creative Timeline
-            </span>
+            <span className="section-label">Creative Timeline</span>
             <h2 className="section-title mb-4">From Spark to Finish</h2>
             <p className="section-subtitle">
               The six stages every piece travels through—messy middle included.
@@ -126,16 +124,16 @@ export default function CreativeProcessTimeline() {
           </div>
 
           <div className="relative max-w-3xl mx-auto">
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-border-light" aria-hidden="true" />
-            <div className="space-y-12">
+            <div className="absolute left-12 top-0 bottom-0 w-1 bg-border" aria-hidden="true" />
+            <div className="space-y-10">
               {processStages.map((stage, index) => (
-                <div key={stage.id} className="relative flex gap-8">
-                  <div className="relative flex-shrink-0 w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center z-10 border-4 border-surface">
-                    <stage.icon size={24} className="text-text" aria-hidden="true" />
+                <div key={stage.id} className="relative flex gap-6">
+                  <div className="relative flex-shrink-0 w-14 h-14 rounded-none bg-primary-accent flex items-center justify-center z-10 border-4 border-surface shadow-brutal-primary">
+                    <stage.icon size={24} className="text-surface" aria-hidden="true" />
                   </div>
-                  <div className="flex-1 p-6 glass-card rounded-2xl">
+                  <div className="flex-1 p-6 brutal-card rounded-none">
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-accent/15 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-10 h-10 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center">
                         <stage.icon size={20} className="text-primary-accent" aria-hidden="true" />
                       </div>
                       <div>
@@ -147,12 +145,12 @@ export default function CreativeProcessTimeline() {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-4 pt-4 border-t border-border-light">
+                    <div className="mt-4 pt-4 border-t border-border">
                       <h4 className="font-nav text-xs uppercase tracking-wider text-text-subtle mb-2">What happens:</h4>
                       <ul className="space-y-1 text-sm text-text-muted">
                         {stage.details.map((detail, i) => (
                           <li key={i} className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-border-light" aria-hidden="true" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-border" aria-hidden="true" />
                             {detail}
                           </li>
                         ))}
@@ -184,13 +182,11 @@ export default function CreativeProcessTimeline() {
       <div className="container-custom">
         <motion.div
           className="text-center max-w-2xl mx-auto mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <span className="inline-block px-4 py-1.5 bg-primary-accent/15 border border-primary-accent/30 rounded-full text-sm font-nav text-primary-accent mb-4">
-            Creative Timeline
-          </span>
+          <span className="section-label">Creative Timeline</span>
           <h2 className="section-title mb-4">From Spark to Finish</h2>
           <p className="section-subtitle">
             The six stages every piece travels through—messy middle included.
@@ -203,8 +199,8 @@ export default function CreativeProcessTimeline() {
           initial="hidden"
           animate="visible"
         >
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-border-light" aria-hidden="true" />
-          <div className="space-y-12">
+          <div className="absolute left-12 top-0 bottom-0 w-1 bg-border" aria-hidden="true" />
+          <div className="space-y-10">
             {processStages.map((stage, index) => (
               <motion.div
                 key={stage.id}
@@ -212,26 +208,26 @@ export default function CreativeProcessTimeline() {
                 variants={itemVariants}
                 initial="hidden"
                 animate="visible"
-                className="relative flex gap-8"
+                className="relative flex gap-6"
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-                  className="relative flex-shrink-0 w-16 h-16 rounded-full bg-gradient-primary flex items-center justify-center z-10 border-4 border-surface"
+                  transition={{ delay: prefersReduced ? 0 : 0.15, duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
+                  className="relative flex-shrink-0 w-14 h-14 rounded-none bg-primary-accent flex items-center justify-center z-10 border-4 border-surface shadow-brutal-primary"
                 >
-                  <stage.icon size={24} className="text-text" aria-hidden="true" />
+                  <stage.icon size={24} className="text-surface" aria-hidden="true" />
                 </motion.div>
                 <motion.div
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.5 }}
-                  className="flex-1 p-6 glass-card rounded-2xl"
+                  transition={{ delay: prefersReduced ? 0 : 0.15, duration: 0.4 }}
+                  className="flex-1 p-6 brutal-card rounded-none"
                   onClick={() => setExpandedStage(expandedStage === stage.id ? null : stage.id)}
                   style={{ cursor: 'pointer' }}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-primary-accent/15 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-none bg-primary-accent/10 border-brutal border-primary-accent flex items-center justify-center">
                       <stage.icon size={20} className="text-primary-accent" aria-hidden="true" />
                     </div>
                     <div className="flex-1">
@@ -246,21 +242,21 @@ export default function CreativeProcessTimeline() {
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: expandedStage === stage.id ? 'auto' : 0, opacity: expandedStage === stage.id ? 1 : 0 }}
-                    transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: prefersReduced ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="mt-4 pt-4 border-t border-border-light">
+                    <div className="mt-4 pt-4 border-t border-border">
                       <h4 className="font-nav text-xs uppercase tracking-wider text-text-subtle mb-2">What happens:</h4>
                       <ul className="space-y-1 text-sm text-text-muted">
                         {stage.details.map((detail, i) => (
                           <motion.li
                             key={i}
-                            initial={{ opacity: 0, x: -10 }}
+                            initial={{ opacity: 0, x: -8 }}
                             animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: prefersReduced ? 0 : 0.05 * i, duration: 0.3 }}
+                            transition={{ delay: prefersReduced ? 0 : 0.04 * i, duration: 0.25 }}
                             className="flex items-center gap-2"
                           >
-                            <span className="w-1.5 h-1.5 rounded-full bg-border-light" aria-hidden="true" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-border" aria-hidden="true" />
                             {detail}
                           </motion.li>
                         ))}
@@ -275,9 +271,9 @@ export default function CreativeProcessTimeline() {
 
         <motion.div
           className="text-center mt-16"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: prefersReduced ? 0 : 0.7, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
           <p className="text-text-muted mb-6 max-w-xl mx-auto">
             Every piece follows this rhythm, but the timing shifts. Some paintings resolve in days; others simmer for months. 
