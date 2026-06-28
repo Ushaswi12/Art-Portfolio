@@ -1,0 +1,108 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: 'class',
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        background: 'var(--background)',
+        surface: 'var(--surface)',
+        'surface-elevated': 'var(--surface-elevated)',
+        'primary-accent': 'var(--primary)',
+        'primary-accent-hover': '#9B3125',
+        'secondary-accent': 'var(--secondary)',
+        'secondary-accent-hover': '#1E4BE8',
+        text: 'var(--text)',
+        'text-muted': 'var(--text-muted)',
+        'text-subtle': 'var(--text-subtle)',
+        border: 'var(--border)',
+        'border-light': 'var(--border-light)',
+      },
+      fontFamily: {
+        heading: ['Cormorant Garamond', 'serif'],
+        body: ['Inter', 'sans-serif'],
+        nav: ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': ['clamp(3.5rem, 8vw, 7rem)', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        'hero-sub': ['clamp(1.125rem, 2.5vw, 1.5rem)', { lineHeight: '1.6', fontWeight: '400' }],
+        'section-title': ['clamp(2rem, 4vw, 3.5rem)', { lineHeight: '1.2', fontWeight: '600' }],
+        'section-sub': ['clamp(1rem, 1.5vw, 1.25rem)', { lineHeight: '1.6', color: 'var(--text-muted)' }],
+        'card-title': ['1.125rem', { lineHeight: '1.3', fontWeight: '600' }],
+        'card-category': ['0.75rem', { lineHeight: '1.4', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: '500' }],
+        'body-lg': ['1.125rem', { lineHeight: '1.7' }],
+        'body': ['1rem', { lineHeight: '1.7' }],
+        'caption': ['0.875rem', { lineHeight: '1.5', color: 'var(--text-muted)' }],
+        'nav': ['0.875rem', { lineHeight: '1.5', fontWeight: '500', letterSpacing: '0.02em' }],
+      },
+      spacing: {
+        'space-xs': '0.25rem',
+        'space-sm': '0.5rem',
+        'space-md': '1rem',
+        'space-lg': '1.5rem',
+        'space-xl': '2rem',
+        'space-2xl': '3rem',
+        'space-3xl': '4rem',
+        'space-4xl': '6rem',
+        'space-5xl': '8rem',
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+      },
+      boxShadow: {
+        'soft': '0 2px 8px rgba(0, 0, 0, 0.15)',
+        'medium': '0 8px 24px rgba(0, 0, 0, 0.25)',
+        'large': '0 20px 48px rgba(0, 0, 0, 0.35)',
+        'glow-primary': '0 0 40px rgba(182, 58, 43, 0.3)',
+        'glow-secondary': '0 0 40px rgba(44, 94, 255, 0.3)',
+        'glow-soft': '0 0 60px rgba(182, 58, 43, 0.15)',
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(135deg, #B63A2B 0%, #9B3125 100%)',
+        'gradient-secondary': 'linear-gradient(135deg, #2C5EFF 0%, #1E4BE8 100%)',
+        'gradient-hero': 'radial-gradient(ellipse at center, rgba(182, 58, 43, 0.15) 0%, transparent 70%)',
+        'gradient-surface': 'linear-gradient(180deg, var(--surface-elevated) 0%, var(--surface) 100%)',
+        'gradient-glass': 'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
+      },
+      backdropBlur: {
+        'glass': '20px',
+      },
+      transitionDuration: {
+        'fast': '150ms',
+        'normal': '300ms',
+        'slow': '500ms',
+        'slower': '700ms',
+      },
+      transitionTimingFunction: {
+        'ease-out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+        'ease-spring': 'cubic-bezier(0.34, 1.56, 0.64, 1)',
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'fade-up': 'fadeUp 0.7s ease-out forwards',
+        'scale-in': 'scaleIn 0.5s ease-out forwards',
+        'slide-up': 'slideUp 0.6s ease-out forwards',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        fadeUp: {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        slideUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+    },
+  },
+  plugins: [],
+}
