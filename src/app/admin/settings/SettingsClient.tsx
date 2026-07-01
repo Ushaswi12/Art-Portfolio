@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Save, Loader2, Check, Eye, Settings, Plus, Trash2, Lock } from 'lucide-react';
 import { artistInfoSchema, type ArtistInfoInput } from '@/lib/validations';
 import { artistInfo as defaultArtistInfo } from '@/data/site';
+import { ImageDropzone } from '@/components/admin/ImageDropzone';
 
 const sections = [
   { id: 'general', label: 'General branding', icon: Settings, description: 'Branding metadata, social links, and location' },
@@ -133,10 +134,13 @@ export function SettingsClient() {
                       <label className="label">Artist Display Name</label>
                       <input {...register('name')} className="input-field" placeholder="Ushaswi Potlapally" />
                     </div>
-                    <div>
-                      <label className="label">Portrait URL</label>
-                      <input {...register('portrait')} className="input-field" placeholder="/images/artist-portrait.jpg" />
-                    </div>
+                    <ImageDropzone
+                      fieldId="artist-portrait"
+                      label="Artist Portrait Photo"
+                      placeholder="Drop your profile photo here"
+                      value={watch('portrait') || ''}
+                      onChange={(url) => setValue('portrait', url)}
+                    />
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label className="label">Studio Location</label>

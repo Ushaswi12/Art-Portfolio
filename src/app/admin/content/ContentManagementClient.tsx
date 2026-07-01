@@ -5,8 +5,9 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { pageContentSchema, type PageContentInput } from '@/lib/validations';
-import { Save, Loader2, Check, Image, FileText, Palette, Trash2, Plus, Video } from 'lucide-react';
+import { Save, Loader2, Check, Image, FileText, Palette, Trash2, Plus, Video, ExternalLink } from 'lucide-react';
 import { pageContent } from '@/data/site';
+import { ImageDropzone } from '@/components/admin/ImageDropzone';
 
 const sectionTabs = [
   { id: 'hero', label: 'Hero Section', icon: Image },
@@ -45,32 +46,6 @@ export function ContentManagementClient() {
     loadContent();
   }, [loadContent]);
 
-  // Broadcast updates to the iframe preview in real-time as fields change
-  const broadcastPreview = useCallback(() => {
-    const iframe = document.getElementById('preview-iframe') as HTMLIFrameElement;
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({
-        type: 'PORTFOLIO_PREVIEW_UPDATE',
-        data: formValues,
-      }, '*');
-
-      iframe.contentWindow.postMessage({
-        type: 'ARTIST_INFO_PREVIEW_UPDATE',
-        data: {
-          bio: formValues.about?.biography,
-          statement: formValues.about?.statement,
-        }
-      }, '*');
-    }
-  }, [formValues]);
-
-  useEffect(() => {
-    broadcastPreview();
-  }, [formValues, broadcastPreview]);
-
-  const handleIframeLoad = () => {
-    broadcastPreview();
-  };
 
   const onSubmit = async (formData: PageContentInput) => {
     setStatus('saving');
@@ -362,20 +337,26 @@ export function ContentManagementClient() {
                               <input {...register(`behindTheScenes.items.${index}.category`)} className="input-field text-sm" placeholder="Process" />
                             </div>
                           </div>
-                          <div className="grid sm:grid-cols-3 gap-3">
+                          <div className="grid sm:grid-cols-2 gap-3">
                             <div>
                               <label className="label">Duration</label>
                               <input {...register(`behindTheScenes.items.${index}.duration`)} className="input-field text-sm" placeholder="1:24" />
-                            </div>
-                            <div>
-                              <label className="label">Thumbnail Path</label>
-                              <input {...register(`behindTheScenes.items.${index}.thumbnail`)} className="input-field text-sm" placeholder="/images/sunset-meadow.jpg" />
                             </div>
                             <div>
                               <label className="label">Video Reel Instagram URL</label>
                               <input {...register(`behindTheScenes.items.${index}.instagramUrl`)} className="input-field text-sm" placeholder="https://instagram.com/p/..." />
                             </div>
                           </div>
+                          <ImageDropzone
+                            fieldId={`bts-thumb-${index}`}
+                            label="Thumbnail Image"
+                            value={formValues.behindTheScenes?.items?.[index]?.thumbnail || ''}
+                            onChange={(url) => {
+                              const updated = [...(formValues.behindTheScenes?.items || [])];
+                              updated[index] = { ...updated[index], thumbnail: url };
+                              setValue('behindTheScenes.items', updated);
+                            }}
+                          />
                           <div>
                             <label className="label">Description</label>
                             <textarea {...register(`behindTheScenes.items.${index}.description`)} rows={2} className="input-field text-sm resize-y" placeholder="Video caption..." />
@@ -409,10 +390,13 @@ export function ContentManagementClient() {
                     <label className="label">Meta Description</label>
                     <textarea {...register('seo.description')} rows={3} className="input-field text-sm resize-y" placeholder="Brief description for search engines..." />
                   </div>
-                  <div>
-                    <label className="label">OG Share Image URL</label>
-                    <input {...register('seo.ogImage')} className="input-field" placeholder="/images/og-image.jpg" />
-                  </div>
+                  <ImageDropzone
+                    fieldId="seo-og-image"
+                    label="OG Share Image"
+                    placeholder="Drop your social share image here"
+                    value={formValues.seo?.ogImage || ''}
+                    onChange={(url) => setValue('seo.ogImage', url)}
+                  />
                   <div>
                     <label className="label">Canonical Domain URL</label>
                     <input {...register('seo.canonicalUrl')} className="input-field" placeholder="https://example.art" />
@@ -423,7 +407,7 @@ export function ContentManagementClient() {
           </div>
         </div>
 
-        {/* Right Pane: Sticky Live Preview Iframe (55%) */}
+        {/* Right Pane: Preview Card */}
         <div className="w-full lg:w-[55%] sticky top-24 hidden lg:block">
           <div className="glass-card rounded-2xl overflow-hidden border border-[var(--color-border-default)] shadow-xl bg-[var(--color-surface)]">
             <div className="bg-[var(--color-surface-muted)] border-b border-[var(--color-border-default)] px-4 py-3 flex items-center justify-between">
@@ -432,17 +416,31 @@ export function ContentManagementClient() {
                 <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
                 <span className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
               </div>
-              <span className="text-xs text-[var(--color-text-muted)] font-mono select-none">Live Portfolio Preview</span>
-              <div className="w-12" /> {/* spacer for visual symmetry */}
+              <span className="text-xs text-[var(--color-text-muted)] font-mono select-none">Portfolio Preview</span>
+              <div className="w-12" />
             </div>
-            <div className="aspect-[16/10] bg-[var(--color-background)] relative">
-              <iframe
-                id="preview-iframe"
-                src="/?preview=true"
-                className="w-full h-full border-none bg-background"
-                title="Portfolio Live Preview"
-                onLoad={handleIframeLoad}
-              />
+            <div className="flex flex-col items-center justify-center gap-6 p-12 text-center">
+              <div className="w-20 h-20 rounded-full bg-[var(--color-primary)]/10 flex items-center justify-center">
+                <ExternalLink size={32} className="text-[var(--color-primary)]" />
+              </div>
+              <div>
+                <h3 className="font-display font-semibold text-[var(--text-h3)] text-[var(--color-text)] mb-2">View Your Portfolio</h3>
+                <p className="text-[var(--color-text-muted)] text-sm max-w-[20rem]">
+                  After saving, your changes go live within ~1 minute. Click below to open your portfolio in a new tab.
+                </p>
+              </div>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary flex items-center gap-2"
+              >
+                <ExternalLink size={16} />
+                Open Live Portfolio
+              </a>
+              <p className="text-[10px] text-[var(--color-text-muted)] font-mono">
+                ushaswi-art-portfolio.vercel.app
+              </p>
             </div>
           </div>
         </div>
