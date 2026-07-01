@@ -92,7 +92,7 @@
     "title": "Ushaswi Potlapally — Portfolio",
     "description": "Artist portfolio featuring paintings, sketches, portraits, watercolors, acrylics, DIY crafts, and handmade decor. Explore original artworks and commission inquiries.",
     "ogImage": "http://localhost:3000/images/og-image.jpg",
-    "canonicalUrl": "http://localhost:3000",
+    "canonicalUrl": "https://ushaswi-art-portfolio.vercel.app/",
     "structuredData": {
       "@context": "https://schema.org",
       "@type": "Person",
