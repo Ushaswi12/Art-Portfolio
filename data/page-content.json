@@ -2,7 +2,7 @@
   "hero": {
     "headline": "Ushaswi potlapally",
     "subheadline": "Artist • Painter • Storyteller",
-    "featuredArtworkId": "sunset-meadow",
+    "featuredArtworkId": "",
     "ctaPrimary": {
       "label": "Explore Gallery",
       "href": "/gallery"
