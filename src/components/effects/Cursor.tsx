@@ -16,10 +16,10 @@ interface CursorContextValue {
 
 const CursorContext = createContext<CursorContextValue | null>(null);
 
-/* ── Sparkle particle shape ──────────────────────────────────────────────── */
-const STAR_SVG = (
+/* ── Heart particle shape ───────────────────────────────────────────────── */
+const HEART_SVG = (
   <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10 0l1.8 6.5H18l-5 3.7 1.9 6.5L10 13l-4.9 3.7L7 9.2 2 5.5h6.2z" />
+    <path d="M10 17.5s-8-5.25-8-10.5a5 5 0 0 1 8-4 5 5 0 0 1 8 4c0 5.25-8 10.5-8 10.5z" />
   </svg>
 );
 
@@ -35,12 +35,12 @@ interface Sparkle {
 }
 
 const SPARKLE_COLORS = [
-  '#E07A5A', // rose-terracotta
-  '#F7CAC9', // blush pink
-  '#D4A8C7', // dusty lavender
-  '#FFD6D6', // soft pink
-  '#B5838D', // mauve
-  '#F2C4CE', // petal pink
+  '#FF85A1', // hot pink
+  '#FFB3C6', // baby pink
+  '#FF69B4', // deep pink
+  '#FFC0CB', // classic pink
+  '#FF4D7D', // rose pink
+  '#FFADC5', // soft pink blush
 ];
 
 let sparkleId = 0;
@@ -179,7 +179,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
                   pointerEvents: 'none',
                 }}
               >
-                {STAR_SVG}
+                {HEART_SVG}
               </motion.span>
             ))}
           </AnimatePresence>
@@ -221,30 +221,17 @@ function CustomCursor({
       }}
       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
     >
-      {/* Outer ring — rose-gold tint */}
+      {/* Outer ring — small, rose pink */}
       <div
         className="absolute rounded-full border-2"
         style={{
-          width: '2rem',
-          height: '2rem',
-          top: '-1rem',
-          left: '-1rem',
+          width: '1rem',
+          height: '1rem',
+          top: '-0.5rem',
+          left: '-0.5rem',
           borderColor: 'var(--color-primary)',
-          boxShadow: '0 0 8px var(--color-primary)',
+          boxShadow: '0 0 6px var(--color-primary)',
           transition: 'border-color 200ms, box-shadow 200ms',
-        }}
-      />
-      {/* Inner dot */}
-      <div
-        className="absolute rounded-full bg-[var(--color-primary)]"
-        style={{
-          width: isHovering ? '0' : '6px',
-          height: isHovering ? '0' : '6px',
-          top: isHovering ? '0' : '-3px',
-          left: isHovering ? '0' : '-3px',
-          opacity: isHovering ? 0 : isClicking ? 1.5 : 1,
-          transition: 'all 150ms ease-out',
-          boxShadow: '0 0 5px var(--color-primary)',
         }}
       />
     </motion.div>
