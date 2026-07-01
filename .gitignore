@@ -47,5 +47,5 @@ Desktop.ini
 .cache
 .eslintcache
 
-# uploads
-public/uploads/
+# uploads - tracked intentionally for artwork images
+# public/uploads/
