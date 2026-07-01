@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
+import Image from 'next/image';
 import { Play, Video } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLivePreview } from '@/hooks/useLivePreview';
@@ -11,7 +12,7 @@ const fallbackReels = [
     title: 'Morning Sketch Routine', 
     description: '30 minutes of graphite before coffee. No reference, just muscle memory and whatever\'s on my mind.', 
     duration: '1:24', 
-    thumbnail: 'https://www.instagram.com/p/DaIRNbihjYZ/media/?size=l',
+    thumbnail: '/uploads/DaIRNbihjYZ.jpg',
     category: 'Process',
     instagramUrl: 'https://www.instagram.com/p/DaIRNbihjYZ/'
   },
@@ -20,7 +21,7 @@ const fallbackReels = [
     title: 'Watercolor Wet-on-Wet', 
     description: 'Letting pigment flow and bloom. The paper does half the work—you just guide the water.', 
     duration: '2:10', 
-    thumbnail: 'https://www.instagram.com/p/DaCe5Pyhjgu/media/?size=l',
+    thumbnail: '/uploads/DaCe5Pyhjgu.jpg',
     category: 'Technique',
     instagramUrl: 'https://www.instagram.com/p/DaCe5Pyhjgu/'
   },
@@ -29,7 +30,7 @@ const fallbackReels = [
     title: 'Macramé Knot by Knot', 
     description: 'Hours of repetitive knotting become meditation. Square knots, spiral knots, gathering knots—rhythm in rope.', 
     duration: '3:45', 
-    thumbnail: 'https://www.instagram.com/p/DZ2RgBjhGj3/media/?size=l',
+    thumbnail: '/uploads/DZ2RgBjhGj3.jpg',
     category: 'Craft',
     instagramUrl: 'https://www.instagram.com/p/DZ2RgBjhGj3/'
   },
@@ -38,7 +39,7 @@ const fallbackReels = [
     title: 'Miniature Sculpting', 
     description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', 
     duration: '2:30', 
-    thumbnail: 'https://www.instagram.com/p/DZzxCTRBo94/media/?size=l',
+    thumbnail: '/uploads/DZzxCTRBo94.jpg',
     category: 'Detail',
     instagramUrl: 'https://www.instagram.com/p/DZzxCTRBo94/'
   },
@@ -47,7 +48,7 @@ const fallbackReels = [
     title: 'Pressed Flower Process', 
     description: 'Weeks of pressing, careful arrangement, resin mixing. Preserving a moment of spring forever.', 
     duration: '1:55', 
-    thumbnail: 'https://www.instagram.com/p/DZh2rt-BszC/media/?size=l',
+    thumbnail: '/uploads/DZh2rt-BszC.jpg',
     category: 'Nature',
     instagramUrl: 'https://www.instagram.com/p/DZh2rt-BszC/'
   },
@@ -56,7 +57,7 @@ const fallbackReels = [
     title: 'Canvas Layering Time-lapse', 
     description: 'From stained underpainting to final highlights. Six hours compressed—color building, form emerging.', 
     duration: '0:45', 
-    thumbnail: 'https://www.instagram.com/p/DZeQbakBE7z/media/?size=l',
+    thumbnail: '/uploads/DZeQbakBE7z.jpg',
     category: 'Painting',
     instagramUrl: 'https://www.instagram.com/p/DZeQbakBE7z/'
   },
@@ -164,18 +165,15 @@ export function BehindTheScenes() {
                 className="group relative flex-none w-[200px] md:w-[240px] aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-lg cursor-pointer snap-start"
                 role="listitem"
               >
-                {/* Thumbnail Image - native img to support Instagram redirect URLs */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                {/* Thumbnail Image */}
+                <Image 
                   src={item.thumbnail} 
                   alt={item.title} 
-                  className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  onError={(e) => {
-                    // Fallback to a gradient bg if thumbnail fails to load
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
+                  fill 
+                  className="object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-105" 
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw" 
+                  quality={85} 
+                  loading="lazy" 
                 />
 
                 {/* Dark Vignette Overlay */}
