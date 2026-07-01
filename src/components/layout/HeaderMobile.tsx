@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { usePathname } from 'next/navigation';
 
 /**
  * Detect scroll direction (up = true, down = false) with no layout thrashing.
@@ -23,18 +24,18 @@ function useScrollDirection() {
           lastY.current = y;
           ticking.current = false;
         });
-        ticking.current = true;
+        ticking.current = false;
       }
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  return goingUp;
+  return ticking.current ? goingUp : goingUp;
 }
 
 /**
- * HeaderMobile – two behavioural variants:
+ * HeaderMobile – two variant behaviours:
  *   hideOnScroll = false → sticky glass bar (Option A)
  *   hideOnScroll = true  → auto‑hide on scroll (Option B)
  */
@@ -44,12 +45,24 @@ export const HeaderMobile = ({ hideOnScroll = false }: { hideOnScroll?: boolean 
   const { theme, setTheme, resolvedTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const showing = hideOnScroll ? useScrollDirection() : true;
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   const toggleTheme = () => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
+
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `#${targetId}`);
+      }
+    }
+  };
 
   return (
     <motion.header
@@ -99,16 +112,25 @@ export const HeaderMobile = ({ hideOnScroll = false }: { hideOnScroll?: boolean 
         >
           <ul className="flex flex-col gap-2 p-4 text-[var(--color-text)]">
             <li>
-              <Link href="/" onClick={() => setMenuOpen(false)}>
-                Home
+              <Link href="/#hero" onClick={(e) => { setMenuOpen(false); handleNavLinkClick(e, 'hero'); }}>
+                Main
               </Link>
             </li>
             <li>
-              <Link href="/gallery" onClick={() => setMenuOpen(false)}>
+              <Link href="/#about" onClick={(e) => { setMenuOpen(false); handleNavLinkClick(e, 'about'); }}>
+                About
+              </Link>
+            </li>
+            <li>
+              <Link href="/#gallery" onClick={(e) => { setMenuOpen(false); handleNavLinkClick(e, 'gallery'); }}>
                 Gallery
               </Link>
             </li>
-            {/* Add more navigation links as needed */}
+            <li>
+              <Link href="/#contact" onClick={(e) => { setMenuOpen(false); handleNavLinkClick(e, 'contact'); }}>
+                Contact
+              </Link>
+            </li>
           </ul>
         </motion.nav>
       )}

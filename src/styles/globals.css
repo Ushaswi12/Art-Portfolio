@@ -247,6 +247,27 @@
     backdrop-filter: blur(18px);
   }
 
+  /* Glassmorphism Header Bar */
+  .glass {
+    background-color: rgba(255, 251, 247, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: var(--glass-shadow);
+  }
+
+  .dark .glass {
+    background-color: rgba(18, 16, 15, 0.82);
+    box-shadow: var(--glass-shadow-dark);
+  }
+
+  .glass-border-b {
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .dark .glass-border-b {
+    border-bottom: 1px solid var(--glass-border-dark);
+  }
+
   .glass-card-hover {
     background-color: var(--glass-bg);
     border: 1px solid var(--glass-border);

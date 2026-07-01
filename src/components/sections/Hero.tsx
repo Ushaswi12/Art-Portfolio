@@ -55,6 +55,8 @@ export function Hero() {
   const scale = useTransform(scrollY, [0, viewportHeight], [1, 1.05]);
   const blur = useTransform(scrollY, [0, viewportHeight], [0, 20]);
 
+  const words = (pageContent?.hero?.headline || '').split(' ');
+
   if (!mounted) {
     return (
       <section
@@ -80,10 +82,13 @@ export function Hero() {
           <div className="max-w-[56rem] mx-auto flex flex-col items-center">
             <div className="section-header">
               <span className="section-label">{pageContent.hero.subheadline}</span>
-              <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke" style={{ textTransform: 'none' }}>
-                {pageContent.hero.headline}
+              <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke flex flex-wrap justify-center gap-[0.25em]" style={{ textTransform: 'none' }}>
+                {words.map((word, idx) => (
+                  <span key={idx} className="inline-block overflow-hidden py-1">
+                    <span className="inline-block">{word}</span>
+                  </span>
+                ))}
               </h1>
-              <p className="section-subtitle max-w-[36rem] mb-10">{pageContent.hero.subheadline}</p>
             </div>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link href="#gallery" className="btn-primary group gap-3" {...magnetic}>
@@ -153,26 +158,47 @@ export function Hero() {
         className="container-custom relative z-20 pt-20 pb-12 px-4 sm:px-6 lg:px-8"
         initial={{ opacity: 0 }}
         animate={{ opacity: imageLoaded ? 1 : 0 }}
-        transition={{ duration: prefersReduced ? 0 : 0.8, staggerChildren: 0.1, delayChildren: 0.2 }}
+        transition={{ duration: prefersReduced ? 0 : 0.8 }}
       >
         <div className="max-w-[56rem] mx-auto flex flex-col items-center">
           <motion.div
             className="section-header"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReduced ? 0 : 0.5 }}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={imageLoaded ? { opacity: 1, scale: 1.03 } : { opacity: 0, scale: 0.98 }}
+            transition={{
+              opacity: { duration: prefersReduced ? 0 : 0.8 },
+              scale: { duration: prefersReduced ? 0 : 3.8, ease: 'easeOut' }
+            }}
           >
             <span className="section-label">{pageContent.hero.subheadline}</span>
-            <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke" style={{ textTransform: 'none' }}>
-              {pageContent.hero.headline}
+            <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke flex flex-wrap justify-center gap-[0.25em]" style={{ textTransform: 'none' }}>
+              {words.map((word, idx) => (
+                <span key={idx} className="inline-block overflow-hidden py-1">
+                  <motion.span
+                    initial={{ y: '100%', opacity: 0 }}
+                    animate={imageLoaded ? { y: 0, opacity: 1 } : { y: '100%', opacity: 0 }}
+                    transition={{
+                      duration: prefersReduced ? 0 : 0.65,
+                      ease: [0.16, 1, 0.3, 1],
+                      delay: prefersReduced ? 0 : 0.2 + idx * 0.15,
+                    }}
+                    className="inline-block"
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
             </h1>
-            <p className="section-subtitle max-w-[36rem] mb-10">{pageContent.hero.subheadline}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReduced ? 0 : 0.5, delay: 0.1 }}
+            animate={imageLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ 
+              duration: prefersReduced ? 0 : 0.8, 
+              delay: prefersReduced ? 0 : 0.8 + (words.length * 0.15),
+              ease: [0.16, 1, 0.3, 1] 
+            }}
           >
             <div className="flex flex-wrap gap-4 justify-center">
               <Link href="#gallery" className="btn-primary group gap-3" {...magnetic}>

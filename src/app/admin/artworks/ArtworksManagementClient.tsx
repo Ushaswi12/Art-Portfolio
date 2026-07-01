@@ -19,7 +19,7 @@ export function ArtworksManagementClient() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     title: '', category: 'Paintings', medium: '', year: new Date().getFullYear().toString(),
-    dimensions: '', desc: '', artistsNote: '', featured: false, imageUrl: '', thumbUrl: '',
+    dimensions: '', desc: '', artistsNote: '', featured: false, imageUrl: '', thumbUrl: '', instagramUrl: '',
   });
   const [imagePreview, setImagePreview] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -94,11 +94,11 @@ export function ArtworksManagementClient() {
     setEditingId(artwork.id);
     setFormData({ title: artwork.title, category: artwork.category, medium: artwork.medium, year: artwork.year,
       dimensions: artwork.dimensions, desc: artwork.desc, artistsNote: artwork.artistsNote || '',
-      featured: artwork.featured, imageUrl: artwork.imageUrl, thumbUrl: artwork.thumbUrl });
+      featured: artwork.featured, imageUrl: artwork.imageUrl, thumbUrl: artwork.thumbUrl, instagramUrl: artwork.instagramUrl || '' });
     setImagePreview(artwork.imageUrl);
   };
 
-  const cancelEdit = () => { setEditingId(null); setFormData({ title: '', category: 'Paintings', medium: '', year: new Date().getFullYear().toString(), dimensions: '', desc: '', artistsNote: '', featured: false, imageUrl: '', thumbUrl: '' }); setImagePreview(''); };
+  const cancelEdit = () => { setEditingId(null); setFormData({ title: '', category: 'Paintings', medium: '', year: new Date().getFullYear().toString(), dimensions: '', desc: '', artistsNote: '', featured: false, imageUrl: '', thumbUrl: '', instagramUrl: '' }); setImagePreview(''); };
 
   const saveArtwork = async () => {
     if (!formData.title.trim() || !formData.category) return;
@@ -200,10 +200,70 @@ export function ArtworksManagementClient() {
                 <span className="text-[var(--text-xs)] text-[var(--color-text-muted)]">({artworkList.length} total)</span>
               </h2>
               <form onSubmit={(e) => { e.preventDefault(); saveArtwork(); }} className="space-y-4">
+                {/* Auto-Import from Instagram link */}
+                <div className="p-4 rounded-xl border border-[var(--color-primary)]/20 bg-[var(--color-primary)]/5 mb-6">
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-[var(--color-primary)] mb-2">Auto-Import from Instagram</h3>
+                  <div className="flex gap-2">
+                    <input 
+                      type="url" 
+                      placeholder="Paste Instagram post or reel link..." 
+                      className="input-field flex-1"
+                      id="insta-import-url"
+                    />
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const input = document.getElementById('insta-import-url') as HTMLInputElement;
+                        const url = input?.value?.trim();
+                        if (!url) {
+                          alert('Please paste an Instagram link first.');
+                          return;
+                        }
+                        try {
+                          setSaving(true);
+                          const res = await fetch(`/api/admin/fetch-instagram-post?url=${encodeURIComponent(url)}`);
+                          if (!res.ok) {
+                            const err = await res.json();
+                            throw new Error(err.error || 'Failed to fetch details');
+                          }
+                          const data = await res.json();
+                          setFormData({
+                            title: data.title,
+                            category: data.category,
+                            medium: data.medium,
+                            year: data.year,
+                            dimensions: data.dimensions,
+                            desc: data.desc,
+                            artistsNote: data.artistsNote,
+                            featured: formData.featured,
+                            imageUrl: data.imageUrl,
+                            thumbUrl: data.thumbUrl,
+                            instagramUrl: data.instagramUrl || url,
+                          });
+                          setImagePreview(data.imageUrl);
+                          alert('Details imported successfully!');
+                        } catch (err: any) {
+                          console.error('Import error:', err);
+                          alert(`Error: ${err.message}`);
+                        } finally {
+                          setSaving(false);
+                        }
+                      }}
+                      disabled={saving}
+                      className="btn-secondary whitespace-nowrap text-sm cursor-pointer"
+                    >
+                      Import Details
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-[var(--color-text-muted)] mt-1.5">
+                    Will automatically extract description, year, category classification, and connect cover/post images.
+                  </p>
+                </div>
+
                 <div><label className="label">Title *</label><input type="text" value={formData.title} onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))} className="input-field" placeholder="Artwork title" /></div>
                 <div><label className="label">Category *</label><select value={formData.category} onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))} className="input-field">{categories.filter(c => c.id !== 'all').map(cat => <option key={cat.id} value={cat.slug}>{cat.name}</option>)}</select></div>
                 <div className="grid sm:grid-cols-2 gap-4"><div><label className="label">Medium</label><input type="text" value={formData.medium} onChange={(e) => setFormData(prev => ({ ...prev, medium: e.target.value }))} className="input-field" placeholder="e.g., Acrylic on Canvas" /></div><div><label className="label">Year</label><input type="number" value={formData.year} onChange={(e) => setFormData(prev => ({ ...prev, year: e.target.value }))} className="input-field" min="2000" max={new Date().getFullYear() + 1} /></div></div>
-                <div><label className="label">Dimensions</label><input type="text" value={formData.dimensions} onChange={(e) => setFormData(prev => ({ ...prev, dimensions: e.target.value }))} className="input-field" placeholder="e.g., 24 x 18 in" /></div>
+                <div className="grid sm:grid-cols-2 gap-4"><div><label className="label">Dimensions</label><input type="text" value={formData.dimensions} onChange={(e) => setFormData(prev => ({ ...prev, dimensions: e.target.value }))} className="input-field" placeholder="e.g., 24 x 18 in" /></div><div><label className="label">Instagram Post Link</label><input type="url" value={formData.instagramUrl} onChange={(e) => setFormData(prev => ({ ...prev, instagramUrl: e.target.value }))} className="input-field" placeholder="https://instagram.com/p/..." /></div></div>
                 <div><label className="label">Description</label><textarea value={formData.desc} onChange={(e) => setFormData(prev => ({ ...prev, desc: e.target.value }))} rows={3} className="input-field resize-y" placeholder="Artwork description..." /></div>
                 <div><label className="label">Artist's Note (optional)</label><textarea value={formData.artistsNote} onChange={(e) => setFormData(prev => ({ ...prev, artistsNote: e.target.value }))} rows={2} className="input-field resize-y" placeholder="Behind-the-scenes story..." /></div>
                 <div className="flex items-center gap-4"><label className="flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={formData.featured} onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))} className="w-4 h-4 rounded border-[var(--color-border-default)] text-[var(--color-primary)] focus:ring-[var(--color-primary)]" /><span className="text-[var(--text-sm)] text-[var(--color-text)]">Featured in Hero/Featured section</span></label></div>

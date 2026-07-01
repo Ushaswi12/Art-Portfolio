@@ -117,7 +117,7 @@ export function About() {
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
               <div>
                 <motion.div variants={itemVariants}>
-                  <div className="sticky top-24">
+                  <div className="space-y-6">
                     <span className="section-label">About the Artist</span>
                     <h2 className="section-title mb-6">Where Vision Meets Canvas</h2>
 
@@ -172,19 +172,29 @@ export function About() {
               <motion.div variants={itemVariants}>
                 <div className="relative">
                   <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5" aria-hidden="true" />
-                    <div className="relative h-full flex items-center justify-center p-8">
-                      <div className="max-w-[28rem] text-center">
-                        <blockquote className="text-xl lg:text-h4 font-light text-text leading-relaxed mb-8 relative">
-                          <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span>
+                    <Image
+                      src={artistInfo.portrait || '/images/artist-portrait.jpg'}
+                      alt={artistInfo.name}
+                      fill
+                      className="object-cover transition-transform duration-700 hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      quality={85}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden="true" />
+                    
+                    {/* Floating quote card overlay inside the photo */}
+                    <div className="absolute bottom-16 left-0 right-0 p-6 sm:p-8">
+                      <div className="max-w-[28rem] text-left">
+                        <blockquote className="text-lg lg:text-xl font-light text-white leading-relaxed mb-4 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                          <span className="text-3xl text-primary font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-3xl text-primary font-display" aria-hidden="true">"</span>
                         </blockquote>
-                        <cite className="text-text-muted">- {artistInfo.name}, Studio Journal</cite>
+                        <cite className="text-sm text-white/80 not-italic block font-medium">- {artistInfo.name}, Studio Journal</cite>
                       </div>
                     </div>
 
-                    <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3 justify-center">
+                    <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-2 justify-center">
                       {['Acrylic', 'Watercolor', 'Graphite', 'Charcoal', 'Macrame', 'Polymer Clay', 'Resin', 'Ceramics'].map((tag) => (
-                        <span key={tag} className="px-3 py-1.5 text-xs font-medium bg-surface/50 backdrop-blur-sm border border-border rounded-full text-text-muted hover:text-text hover:border-border-strong transition-all duration-200">{tag}</span>
+                        <span key={tag} className="px-2.5 py-1 text-[10px] font-medium bg-black/40 backdrop-blur-sm border border-white/10 rounded-full text-white/85 hover:text-white hover:border-white/30 transition-all duration-200">{tag}</span>
                       ))}
                     </div>
                   </div>

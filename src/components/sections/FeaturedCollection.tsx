@@ -53,11 +53,20 @@ export function FeaturedCollection() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" role="list" aria-label="Featured artworks">
-            {featuredArtworks.map((art) => (
+            {featuredArtworks.map((art, index) => (
               <article key={art.id} className="glass-card-hover rounded-2xl overflow-hidden" role="listitem">
                 <Link href={`/gallery#${art.id}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]">
                   <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image src={art.imageUrl} alt="" fill className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" quality={85} />
+                    <Image 
+                      src={art.imageUrl} 
+                      alt="" 
+                      fill 
+                      className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" 
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" 
+                      quality={85} 
+                      priority={index < 3}
+                      loading={index < 3 ? undefined : "lazy"}
+                    />
                   </div>
                   <div className="p-6">
                     <h3 className="font-display font-semibold text-[var(--text-h4)] text-[var(--color-text)] mb-2">{art.title}</h3>
@@ -94,7 +103,16 @@ export function FeaturedCollection() {
             <motion.article key={art.id} custom={index} variants={itemVariants} initial="hidden" animate="visible" whileHover="hover" className="group glass-card-hover rounded-2xl overflow-hidden cursor-pointer" role="listitem">
               <Link href={`/gallery#${art.id}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]" onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.hash = art.id; } }}>
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image src={art.imageUrl} alt="" fill className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" quality={85} />
+                  <Image 
+                    src={art.imageUrl} 
+                    alt="" 
+                    fill 
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" 
+                    quality={85} 
+                    priority={index < 3}
+                    loading={index < 3 ? undefined : "lazy"}
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" aria-hidden="true" />
                   <div className="absolute bottom-0 left-0 right-0 p-5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-200 ease-out">
                     <div className="flex items-center justify-between">

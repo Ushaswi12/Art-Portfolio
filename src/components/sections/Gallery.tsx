@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { artworks as defaultArtworks, categories as defaultCategories } from '@/data/artworks';
-import { Search, X, ChevronLeft, ChevronRight, Expand, Download, Filter } from 'lucide-react';
+import { Search, X, ChevronLeft, ChevronRight, Expand, Download, Filter, ExternalLink } from 'lucide-react';
 import { useMagneticCursor } from '@/components/effects/Cursor';
 import type { Artwork } from '@/types';
 
@@ -128,13 +128,27 @@ export function Gallery() {
           {filteredArtworks.map((art, index) => (
             <motion.article key={art.id} custom={index} variants={itemVariants} initial="hidden" animate="visible" className="group glass-card-hover rounded-xl overflow-hidden cursor-pointer gpu-accelerated" role="listitem" onClick={() => setSelected(art.id)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(art.id); } }} tabIndex={0}>
               <div className="relative aspect-[3/4] overflow-hidden">
-                <Image src={art.imageUrl} alt="" fill className="artwork-image" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw" quality={85} loading="lazy" />
+                {/* Floating category tag in top-left (visible on hover) */}
+                <span className="category-badge absolute top-3.5 left-3.5 z-20 shadow-[0_4px_12px_rgba(0,0,0,0.06)] whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">{art.category}</span>
+
+                <Image 
+                  src={art.imageUrl} 
+                  alt="" 
+                  fill 
+                  className="artwork-image" 
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw" 
+                  quality={85} 
+                  priority={index < 4}
+                  loading={index < 4 ? undefined : "lazy"}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
                 <div className="absolute inset-0 flex items-end p-5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
                   <div className="w-full">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="category-badge">{art.category}</span>
+                    <div className="flex items-center justify-end mb-3">
                       <div className="flex gap-2">
+                        {art.instagramUrl && (
+                          <motion.a href={art.instagramUrl} target="_blank" rel="noopener noreferrer" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="p-2 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors" aria-label={`View ${art.title} on Instagram`} onClick={(e) => e.stopPropagation()}><ExternalLink size={18} /></motion.a>
+                        )}
                         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="p-2 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors" aria-label={`View ${art.title} in fullscreen`} onClick={(e) => { e.stopPropagation(); setSelected(art.id); }}><Expand size={18} /></motion.button>
                         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="p-2 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors" aria-label={`Download ${art.title}`}><Download size={18} /></motion.button>
                       </div>
@@ -214,6 +228,19 @@ function Lightbox({ artId, artworks, onClose, onPrev, onNext, prefersReduced }: 
                 <span>{art.medium}</span><span aria-hidden="true">·</span><time>{art.year}</time><span aria-hidden="true">·</span><span>{art.dimensions}</span>
               </div>
             </div>
+            {art.instagramUrl && (
+              <motion.a 
+                href={art.instagramUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }}
+                className="btn-secondary self-start md:self-auto gap-2 flex items-center text-sm px-4 py-2 border border-[var(--color-border-default)] bg-[var(--color-surface)] hover:bg-[var(--color-bg-muted)] text-[var(--color-text)] rounded-xl transition-all cursor-pointer"
+              >
+                <ExternalLink size={16} />
+                <span>View on Instagram</span>
+              </motion.a>
+            )}
           </div>
           {art.desc && <motion.p className="mt-6 pt-6 border-t border-[var(--color-border-default)] text-[var(--color-text-muted)] leading-relaxed" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>{art.desc}</motion.p>}
           {art.artistsNote && art.artistsNote !== art.desc && <motion.p className="mt-4 pt-4 border-t border-[var(--color-border-default)] text-[var(--text-sm)] text-[var(--color-text-muted)] italic" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>"{art.artistsNote}"</motion.p>}

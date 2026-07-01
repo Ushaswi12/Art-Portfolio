@@ -10,10 +10,12 @@ import { Menu, X } from 'lucide-react';
 import { useLivePreview } from '@/hooks/useLivePreview';
 
 const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/gallery', label: 'Gallery' },
-  { href: '/about', label: 'About' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/#hero', label: 'Main', targetId: 'hero' },
+  { href: '/#about', label: 'About', targetId: 'about' },
+  { href: '/#featured', label: 'Featured', targetId: 'featured' },
+  { href: '/#behind-scenes', label: 'Process', targetId: 'behind-scenes' },
+  { href: '/#gallery', label: 'Gallery', targetId: 'gallery' },
+  { href: '/#contact', label: 'Contact', targetId: 'contact' },
 ];
 
 function HeaderInner({ pathname, artistName }: { pathname: string; artistName: string }) {
@@ -21,6 +23,7 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
   const { scrollY } = useScroll();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -29,34 +32,100 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // ScrollSpy via IntersectionObserver
+  useEffect(() => {
+    if (pathname !== '/') return;
+
+    const sections = ['hero', 'about', 'featured', 'behind-scenes', 'gallery', 'contact'];
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -50% 0px', // detects when section is around middle of viewport
+      threshold: 0,
+    };
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => {
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) observer.unobserve(el);
+      });
+    };
+  }, [pathname]);
+
+  // Handle hash scroll on mount
+  useEffect(() => {
+    if (pathname === '/' && typeof window !== 'undefined' && window.location.hash) {
+      const hash = window.location.hash.substring(1);
+      const timer = setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [pathname]);
+
+  const handleNavLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    if (pathname === '/') {
+      e.preventDefault();
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+        window.history.pushState(null, '', `#${targetId}`);
+        setActiveSection(targetId);
+      }
+    }
+  };
+
   const opacity = useTransform(scrollY, [0, 50], [1, 0.95]);
   const height = useTransform(scrollY, [0, 100], [80, 68]);
 
   return (
     <motion.header
-      className={`fixed inset-x-0 top-0 z-50 flex flex-col justify-center transition-all duration-300 ${
-        isScrolled || mobileOpen ? 'glass glass-border-b' : 'bg-transparent'
-      }`}
+      className="fixed inset-x-0 top-0 z-50 flex flex-col justify-center transition-all duration-300 glass glass-border-b"
       style={{ opacity, height }}
     >
       <nav className="container-custom flex items-center justify-between h-full px-4 sm:px-6 lg:px-8" role="banner" aria-label="Main navigation">
-        <Link href="/" className="font-display font-semibold text-xl tracking-tight text-[var(--color-text)] logo-drop-shadow hover:scale-102 transition-transform duration-200" aria-label={`${artistName} Home`}>
+        <Link 
+          href="/" 
+          onClick={(e) => handleNavLinkClick(e, 'hero')}
+          className="font-display font-semibold text-xl tracking-tight logo-drop-shadow hover:scale-102 transition-transform duration-200 flex items-center h-10 leading-none pt-1 text-[var(--color-text)]"
+          aria-label={`${artistName} Home`}
+        >
           {artistName}
         </Link>
 
-        {/* Center: floating, pill-shaped dock container with modern glassmorphism */}
-        <div className="hidden md:flex items-center gap-1 px-4 py-1.5 rounded-full border border-[rgba(255,255,255,0.15)] bg-[rgba(255,255,255,0.08)] dark:bg-[rgba(0,0,0,0.4)] backdrop-blur-[12px] shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
+        {/* Center: simple flex container directly on the header bar */}
+        <div className="hidden md:flex items-center gap-1">
           {navLinks.map((link) => (
             <MagneticLink
               key={link.href}
               href={link.href}
               label={link.label}
-              isActive={pathname === link.href}
+              isActive={(pathname === '/' && activeSection === link.targetId) || (pathname !== '/' && pathname === link.href)}
+              onClick={(e) => handleNavLinkClick(e, link.targetId)}
+              isTransparent={false}
             />
           ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2 h-10 justify-center">
           <ThemeToggle />
         </div>
 
@@ -85,8 +154,15 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
             <li key={link.href}>
               <Link
                 href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="block px-4 py-3 text-[var(--text-lg)] font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] rounded-lg transition-colors duration-200"
+                onClick={(e) => {
+                  setMobileOpen(false);
+                  handleNavLinkClick(e, link.targetId);
+                }}
+                className={`block px-4 py-3 text-[var(--text-lg)] font-medium rounded-lg transition-colors duration-200 ${
+                  pathname === '/' && activeSection === link.targetId
+                    ? 'text-[var(--color-primary)] bg-[var(--color-primary-light)]'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)]'
+                }`}
               >
                 {link.label}
               </Link>
@@ -126,7 +202,19 @@ export function Header() {
   return <HeaderInner pathname={pathname} artistName={artistName} />;
 }
 
-function MagneticLink({ href, label, isActive }: { href: string; label: string; isActive: boolean }) {
+function MagneticLink({ 
+  href, 
+  label, 
+  isActive, 
+  onClick,
+  isTransparent
+}: { 
+  href: string; 
+  label: string; 
+  isActive: boolean; 
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void; 
+  isTransparent: boolean;
+}) {
   const { onMouseEnter, onMouseLeave, onMouseDown, onMouseUp } = useMagneticCursor();
 
   return (
@@ -136,13 +224,16 @@ function MagneticLink({ href, label, isActive }: { href: string; label: string; 
       onMouseLeave={onMouseLeave}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
+      onClick={onClick}
       className="relative px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 inline-block"
     >
       <motion.span
         className={`inline-block ${
           isActive
             ? 'text-[var(--color-primary)] font-semibold'
-            : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+            : isTransparent
+              ? 'text-white/80 hover:text-white font-medium'
+              : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
         }`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
