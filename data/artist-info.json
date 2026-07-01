@@ -1,0 +1,74 @@
+{
+  "name": "Test Artist",
+  "bio": "This is paragraph one of the brand new dynamic bio.\n\nThis is paragraph two of the brand new dynamic bio, demonstrating paragraphs mapping successfully.",
+  "statement": "\"Art is not what you see, but what you make others see. The canvas is a mirror, and every viewer brings their own reflection.\" — Ushaswi Potlapally, Studio Journal 2024",
+  "portrait": "/images/test-portrait.jpg",
+  "cv": {
+    "education": [
+      "Self-taught artist with 5+ years of dedicated practice",
+      "Workshops in traditional watercolor techniques",
+      "Ceramics study with master potters in Kerala",
+      "Macramé and fiber arts apprenticeship"
+    ],
+    "exhibitions": [
+      {
+        "id": "exh-1",
+        "title": "Emerging Voices",
+        "venue": "Contemporary Art Gallery",
+        "location": "Mumbai, India",
+        "date": "2024",
+        "type": "group",
+        "description": "Group exhibition featuring 12 emerging Indian artists working across mediums."
+      },
+      {
+        "id": "exh-2",
+        "title": "Intimate Scale",
+        "venue": "Studio Space",
+        "location": "Bangalore, India",
+        "date": "2023",
+        "type": "solo",
+        "description": "First solo exhibition showcasing miniature sculptures and works on paper."
+      },
+      {
+        "id": "exh-3",
+        "title": "Craft Contemporary",
+        "venue": "Design Museum",
+        "location": "Delhi, India",
+        "date": "2023",
+        "type": "group",
+        "description": "Curated exhibition exploring the intersection of traditional craft and contemporary art."
+      }
+    ],
+    "awards": [
+      {
+        "id": "awd-1",
+        "title": "Emerging Artist Grant",
+        "organization": "India Foundation for the Arts",
+        "year": "2024",
+        "description": "Awarded for innovative work combining traditional craft with contemporary practice."
+      },
+      {
+        "id": "awd-2",
+        "title": "Best Portfolio Award",
+        "organization": "Art Students League",
+        "year": "2022"
+      }
+    ],
+    "publications": [
+      "Featured in \"Contemporary Indian Craft\" magazine, 2024",
+      "Interview in \"Studio Visit\" podcast, Episode 47, 2023",
+      "Work featured in \"The Art of Making\" online publication, 2023"
+    ]
+  },
+  "socialLinks": [
+    {
+      "platform": "instagram",
+      "url": "https://instagram.com/testartist",
+      "label": "Follow TestArtist"
+    }
+  ],
+  "contactInfo": {
+    "email": "test@example.com",
+    "location": "Test City, Test Country"
+  }
+}

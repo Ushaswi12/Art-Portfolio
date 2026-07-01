@@ -33,6 +33,7 @@
 
   /* Light Theme Colors - Brighter Palette */
   --color-bg: #FFFBF7;
+  --color-bg-rgb: 255, 251, 247;
   --color-bg-elevated: #FFFFFF;
   --color-bg-muted: #F5F0EB;
   --color-fg: #151515;
@@ -47,6 +48,7 @@
 
   /* Dark Theme Colors - Warmer & Brighter */
   --color-bg-dark: #12100F;
+  --color-bg-dark-rgb: 18, 16, 15;
   --color-bg-elevated-dark: #1A1715;
   --color-bg-muted-dark: #221E1C;
   --color-fg-dark: #FDF8F4;
@@ -61,6 +63,7 @@
 
   /* Semantic Color Aliases (Light Default) */
   --color-background: var(--color-bg);
+  --color-background-rgb: var(--color-bg-rgb);
   --color-surface: var(--color-bg-elevated);
   --color-surface-muted: var(--color-bg-muted);
   --color-text: var(--color-fg);
@@ -73,13 +76,17 @@
   --color-border-focus: var(--color-border-focus);
 
   /* Glassmorphism */
-  --glass-bg: rgba(255, 251, 247, 0.8);
-  --glass-bg-dark: rgba(18, 16, 15, 0.8);
-  --glass-border: rgba(21, 21, 21, 0.08);
-  --glass-border-dark: rgba(253, 248, 244, 0.08);
-  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
-  --glass-shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.25);
-  --glass-blur: 18px;
+  --glass-bg: rgba(255, 248, 245, 0.82);
+  --glass-bg-dark: rgba(18, 16, 15, 0.82);
+  --glass-border: rgba(224, 122, 90, 0.12);
+  --glass-border-dark: rgba(240, 160, 128, 0.1);
+  --glass-shadow: 0 4px 24px rgba(180, 90, 60, 0.07);
+  --glass-shadow-dark: 0 4px 24px rgba(0, 0, 0, 0.28);
+  --glass-blur: 20px;
+  /* Rose-gold accent glass */
+  --glass-rose-bg: rgba(255, 235, 230, 0.6);
+  --glass-rose-border: rgba(224, 122, 90, 0.22);
+  --glass-rose-shadow: 0 8px 32px rgba(180, 80, 60, 0.12), inset 0 1px 0 rgba(255,255,255,0.5);
 
   /* Spacing Scale */
   --space-xs: 0.25rem;
@@ -366,6 +373,108 @@
     background-color: var(--color-border-default);
     border-radius: 3px;
   }
+
+  /* ── Polaroid Scrapbook Cards ─────────────────────────────────────── */
+  .polaroid-card {
+    position: relative;
+    background: linear-gradient(145deg, #fffaf7 0%, #fff5f0 100%);
+    border: 1px solid rgba(220, 180, 160, 0.25);
+    border-radius: 2px;
+    padding: 0.625rem 0.625rem 0;
+    box-shadow:
+      0 4px 16px rgba(160, 80, 50, 0.1),
+      0 1px 4px rgba(160, 80, 50, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: box-shadow 250ms ease-out, transform 250ms ease-out;
+    will-change: transform;
+    cursor: pointer;
+  }
+
+  .polaroid-card:hover {
+    box-shadow:
+      0 12px 40px rgba(160, 80, 50, 0.18),
+      0 4px 12px rgba(160, 80, 50, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+
+  /* Washi-tape strip at the top of each card */
+  .polaroid-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 44px;
+    height: 20px;
+    border-radius: 2px;
+    opacity: 0.75;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  /* Skeleton loader for polaroids */
+  .polaroid-card-skeleton {
+    background: linear-gradient(90deg, #f5ede8 25%, #ffe8e0 50%, #f5ede8 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite linear;
+    height: 220px;
+    border-radius: 2px;
+  }
+
+  /* 3-column masonry-ish grid with overlap feel */
+  .polaroid-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+    padding: 2rem 0 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .polaroid-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+  }
+
+  /* Sparkle background deco */
+  .sparkle-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .sparkle-star {
+    position: absolute;
+    font-size: 1rem;
+    color: var(--color-primary);
+    opacity: 0.18;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  .sparkle-star-0 { top: 8%; left: 5%; animation-delay: 0s; }
+  .sparkle-star-1 { top: 20%; right: 6%; animation-delay: 0.7s; }
+  .sparkle-star-2 { bottom: 18%; left: 12%; animation-delay: 1.4s; }
+  .sparkle-star-3 { bottom: 10%; right: 10%; animation-delay: 2.1s; }
+  .sparkle-star-4 { top: 55%; left: 50%; animation-delay: 0.35s; }
+
+  /* Enhanced glass card with rose-gold accent */
+  .glass-card-rose {
+    background: var(--glass-rose-bg);
+    border: 1px solid var(--glass-rose-border);
+    box-shadow: var(--glass-rose-shadow);
+    border-radius: 1rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: all 300ms ease-out;
+  }
+
+  .glass-card-rose:hover {
+    box-shadow: 0 16px 48px rgba(180, 80, 60, 0.16), inset 0 1px 0 rgba(255,255,255,0.6);
+    border-color: rgba(224, 122, 90, 0.35);
+    transform: translateY(-4px);
+  }
 }
 
 @layer utilities {
@@ -402,6 +511,17 @@
   .stagger-7 { animation-delay: 0.35s; }
   .stagger-8 { animation-delay: 0.4s; }
 
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.15; transform: scale(1) rotate(0deg); }
+    40%       { opacity: 0.45; transform: scale(1.25) rotate(15deg); }
+    70%       { opacity: 0.1;  transform: scale(0.85) rotate(-10deg); }
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -430,6 +550,7 @@
   /* Dark mode color overrides */
   .dark {
     --color-background: var(--color-bg-dark);
+    --color-background-rgb: var(--color-bg-dark-rgb);
     --color-surface: var(--color-bg-elevated-dark);
     --color-surface-muted: var(--color-bg-muted-dark);
     --color-text: var(--color-fg-dark);
@@ -462,5 +583,22 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Responsive screen height overrides */
+  @media (max-height: 780px) {
+    .scroll-indicator {
+      display: none !important;
+    }
+  }
+
+  /* Hero outline text stroke */
+  .hero-title-stroke {
+    color: #ffffff !important;
+    -webkit-text-stroke: 1.5px #000000;
+    text-shadow: 
+      0 4px 24px rgba(0, 0, 0, 0.65), 
+      0 2px 8px rgba(0, 0, 0, 0.5),
+      0 0 100px rgba(0, 0, 0, 0.35);
   }
 }

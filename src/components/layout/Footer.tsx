@@ -4,15 +4,26 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Instagram, Mail, Heart, Twitter, Facebook } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { artistInfo as defaultArtistInfo } from '@/data/site';
+import { useLivePreview } from '@/hooks/useLivePreview';
 
 export function Footer() {
   const [mounted, setMounted] = useState(false);
   const prefersReduced = useReducedMotion();
   const currentYear = new Date().getFullYear();
+  const [artistInfo, setArtistInfo] = useState(defaultArtistInfo);
 
   useEffect(() => {
     setMounted(true);
+    fetch('/api/artist-info')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data) setArtistInfo(data); })
+      .catch(err => console.warn(err));
   }, []);
+
+  useLivePreview<any>('ARTIST_INFO_PREVIEW_UPDATE', (data) => {
+    if (data) setArtistInfo(data);
+  });
 
   const footerLinks = {
     explore: [
@@ -21,12 +32,11 @@ export function Footer() {
       { label: 'About the Artist', href: '/about' },
       { label: 'Commissions', href: '/contact' },
     ],
-    connect: [
-      { label: 'Instagram', href: 'https://instagram.com/ushaswi_014', external: true },
-      { label: 'Email', href: 'mailto:hello@ushaswi.art', external: true },
-      { label: 'Twitter', href: 'https://twitter.com/ushaswi_art', external: true },
-      { label: 'Facebook', href: 'https://facebook.com/ushaswi.art', external: true },
-    ],
+    connect: artistInfo.socialLinks.map(link => ({
+      label: link.label,
+      href: link.url,
+      external: true
+    })),
     legal: [
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms of Service', href: '/terms' },
@@ -36,7 +46,7 @@ export function Footer() {
 
   const socialIcons = {
     Instagram: Instagram,
-    Mail: Mail,
+    Email: Mail,
     Twitter: Twitter,
     Facebook: Facebook,
   };
@@ -47,23 +57,19 @@ export function Footer() {
         <div className="container-custom py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
             <div className="lg:col-span-2">
-              <div className="font-display text-2xl font-semibold text-[var(--color-text)] mb-4">Ushaswi Potlapally</div>
+              <div className="font-display text-2xl font-semibold text-[var(--color-text)] mb-4">{artistInfo.name}</div>
               <p className="text-[var(--color-text-muted)] max-w-[20rem] mb-6 leading-relaxed">
                 Artist | DIY Crafts | Sketch | Handmade Art | Mini Crafts | India
               </p>
               <div className="flex gap-4">
-                <a href="https://instagram.com/ushaswi_014" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200" aria-label="Follow on Instagram">
-                  <Instagram size={18} aria-hidden="true" />
-                </a>
-                <a href="mailto:hello@ushaswi.art" className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200" aria-label="Send email">
-                  <Mail size={18} aria-hidden="true" />
-                </a>
-                <a href="https://twitter.com/ushaswi_art" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200" aria-label="Follow on Twitter">
-                  <Twitter size={18} aria-hidden="true" />
-                </a>
-                <a href="https://facebook.com/ushaswi.art" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200" aria-label="Follow on Facebook">
-                  <Facebook size={18} aria-hidden="true" />
-                </a>
+                {artistInfo.socialLinks.map((link) => {
+                  const Icon = socialIcons[link.label as keyof typeof socialIcons] || Mail;
+                  return (
+                    <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200" aria-label={`Follow on ${link.label}`}>
+                      <Icon size={18} aria-hidden="true" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
             <div>
@@ -106,7 +112,7 @@ export function Footer() {
 
           <div className="pt-8 border-t border-[var(--color-border-default)] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-[var(--text-xs)] text-[var(--color-text-subtle)]">
-              &copy; {currentYear} Ushaswi Potlapally. All rights reserved.
+              &copy; {currentYear} {artistInfo.name}. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               <span>Crafted with</span>
@@ -130,25 +136,28 @@ export function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12 py-12 lg:py-16">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <div className="lg:col-span-2">
-                <Link href="/" className="font-display text-2xl font-semibold text-[var(--color-text)] mb-4 block" aria-label="Ushaswi Potlapally Home">
-                  Ushaswi Potlapally
+                <Link href="/" className="font-display text-2xl font-semibold text-[var(--color-text)] mb-4 block" aria-label={`${artistInfo.name} Home`}>
+                  {artistInfo.name}
                 </Link>
                 <p className="text-[var(--color-text-muted)] max-w-[20rem] mb-6 leading-relaxed">
                   Artist | DIY Crafts | Sketch | Handmade Art | Mini Crafts | India
                 </p>
                 <div className="flex gap-4">
-                  {Object.entries(socialIcons).map(([name, Icon]) => (
-                    <a
-                      key={name}
-                      href={footerLinks.connect.find(l => l.label === name)?.href || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200"
-                      aria-label={`Follow on ${name}`}
-                    >
-                      <Icon size={18} aria-hidden="true" />
-                    </a>
-                  ))}
+                  {artistInfo.socialLinks.map((link) => {
+                    const Icon = socialIcons[link.label as keyof typeof socialIcons] || Mail;
+                    return (
+                      <a
+                        key={link.label}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-10 h-10 rounded-lg bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200"
+                        aria-label={`Follow on ${link.label}`}
+                      >
+                        <Icon size={18} aria-hidden="true" />
+                      </a>
+                    );
+                  })}
                 </div>
               </div>
             </motion.div>
@@ -212,7 +221,7 @@ export function Footer() {
         >
           <div className="pt-8 border-t border-[var(--color-border-default)] flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <p className="text-[var(--text-xs)] text-[var(--color-text-subtle)]">
-              &copy; {currentYear} Ushaswi Potlapally. All rights reserved.
+              &copy; {currentYear} {artistInfo.name}. All rights reserved.
             </p>
             <div className="flex items-center gap-4 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               <span>Crafted with</span>

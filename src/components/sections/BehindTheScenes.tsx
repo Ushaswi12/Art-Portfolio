@@ -4,14 +4,63 @@ import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { Play, Video } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useLivePreview } from '@/hooks/useLivePreview';
 
-const behindTheScenes = [
-  { id: 'bts-1', title: 'Morning Sketch Routine', description: '30 minutes of graphite before coffee. No reference, just muscle memory and whatever\'s on my mind.', type: 'video', duration: '1:24', thumbnail: '/images/bts-sketch.jpg', category: 'Process' },
-  { id: 'bts-2', title: 'Watercolor Wet-on-Wet', description: 'Letting pigment flow and bloom. The paper does half the work—you just guide the water.', type: 'video', duration: '2:10', thumbnail: '/images/bts-watercolor.jpg', category: 'Technique' },
-  { id: 'bts-3', title: 'Macramé Knot by Knot', description: 'Hours of repetitive knotting become meditation. Square knots, spiral knots, gathering knots—rhythm in rope.', type: 'video', duration: '3:45', thumbnail: '/images/bts-macrame.jpg', category: 'Craft' },
-  { id: 'bts-4', title: 'Miniature Sculpting', description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', type: 'video', duration: '2:30', thumbnail: '/images/bts-mini.jpg', category: 'Detail' },
-  { id: 'bts-5', title: 'Pressed Flower Process', description: 'Weeks of pressing, careful arrangement, resin mixing. Preserving a moment of spring forever.', type: 'video', duration: '1:55', thumbnail: '/images/bts-pressed.jpg', category: 'Nature' },
-  { id: 'bts-6', title: 'Canvas Layering Time-lapse', description: 'From stained underpainting to final highlights. Six hours compressed—color building, form emerging.', type: 'video', duration: '0:45', thumbnail: '/images/bts-canvas.jpg', category: 'Painting' },
+const fallbackReels = [
+  { 
+    id: 'bts-1', 
+    title: 'Morning Sketch Routine', 
+    description: '30 minutes of graphite before coffee. No reference, just muscle memory and whatever\'s on my mind.', 
+    duration: '1:24', 
+    thumbnail: '/images/sunset-meadow.jpg', 
+    category: 'Process',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
+  { 
+    id: 'bts-2', 
+    title: 'Watercolor Wet-on-Wet', 
+    description: 'Letting pigment flow and bloom. The paper does half the work—you just guide the water.', 
+    duration: '2:10', 
+    thumbnail: '/images/pencil-portrait-study.jpg', 
+    category: 'Technique',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
+  { 
+    id: 'bts-3', 
+    title: 'Macramé Knot by Knot', 
+    description: 'Hours of repetitive knotting become meditation. Square knots, spiral knots, gathering knots—rhythm in rope.', 
+    duration: '3:45', 
+    thumbnail: '/images/watercolor-dreamscape.jpg', 
+    category: 'Craft',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
+  { 
+    id: 'bts-4', 
+    title: 'Miniature Sculpting', 
+    description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', 
+    duration: '2:30', 
+    thumbnail: '/images/diy-macrame-wall.jpg', 
+    category: 'Detail',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
+  { 
+    id: 'bts-5', 
+    title: 'Pressed Flower Process', 
+    description: 'Weeks of pressing, careful arrangement, resin mixing. Preserving a moment of spring forever.', 
+    duration: '1:55', 
+    thumbnail: '/images/mini-clay-collection.jpg', 
+    category: 'Nature',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
+  { 
+    id: 'bts-6', 
+    title: 'Canvas Layering Time-lapse', 
+    description: 'From stained underpainting to final highlights. Six hours compressed—color building, form emerging.', 
+    duration: '0:45', 
+    thumbnail: '/images/handmade-ceramic-vase.jpg', 
+    category: 'Painting',
+    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+  },
 ];
 
 function BehindTheScenesSkeleton() {
@@ -23,33 +72,10 @@ function BehindTheScenesSkeleton() {
           <h2 className="section-title">Process in Motion</h2>
           <p className="section-subtitle">Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Behind the scenes videos">
-          {behindTheScenes.map((item) => (
-            <article key={item.id} className="group glass-card-hover rounded-xl overflow-hidden" role="listitem">
-              <div className="relative aspect-video overflow-hidden">
-                <Image src={item.thumbnail} alt="" fill className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" quality={85} loading="lazy" />
-                <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <button className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-surface border-4 border-surface shadow-glow" aria-label={`Watch ${item.title}`}>
-                    <motion.span whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                      <Play size={32} className="ml-1" aria-hidden="true" />
-                    </motion.span>
-                  </button>
-                </div>
-                <div className="absolute bottom-3 right-3 bg-black/80 text-surface text-xs px-2 py-1 rounded font-medium">{item.duration}</div>
-                <div className="absolute top-3 left-3 bg-primary text-surface text-xs px-2 py-1 rounded font-medium">{item.category}</div>
-              </div>
-              <div className="p-5">
-                <h3 className="font-display font-semibold text-h4 text-text mb-2 group-hover:text-primary transition-colors duration-200">{item.title}</h3>
-                <p className="text-sm text-text-muted">{item.description}</p>
-              </div>
-            </article>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {fallbackReels.map((item) => (
+            <div key={item.id} className="relative aspect-[9/16] bg-[var(--color-bg-muted)] rounded-2xl overflow-hidden animate-pulse" />
           ))}
-        </div>
-        <div className="text-center mt-10">
-          <a href="https://instagram.com/ushaswi_014/reels" target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex">
-            View All Reels on Instagram
-            <Video size={20} className="group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" />
-          </a>
         </div>
       </div>
     </section>
@@ -59,54 +85,115 @@ function BehindTheScenesSkeleton() {
 export function BehindTheScenes() {
   const [mounted, setMounted] = useState(false);
   const prefersReduced = useReducedMotion();
+  const [pageContent, setPageContent] = useState<any>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    fetch('/api/content')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data) setPageContent(data); })
+      .catch(err => console.warn(err));
+  }, []);
 
-  const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: prefersReduced ? 0 : 0.1 } } };
-  const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] as const } }, hover: { y: -8, transition: { duration: 0.2 } } };
+  useLivePreview<any>('PORTFOLIO_PREVIEW_UPDATE', (data) => {
+    if (data) setPageContent(data);
+  });
+
+  const containerVariants = { 
+    hidden: { opacity: 0 }, 
+    visible: { opacity: 1, transition: { staggerChildren: prefersReduced ? 0 : 0.08 } } 
+  };
+  
+  const itemVariants = { 
+    hidden: { opacity: 0, y: 30 }, 
+    visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] as const } }, 
+    hover: { y: -8, transition: { duration: 0.25, ease: 'easeOut' as const } } 
+  };
 
   if (!mounted) return <BehindTheScenesSkeleton />;
 
+  const btsContent = pageContent?.behindTheScenes || {
+    title: 'Process in Motion',
+    subtitle: 'Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.',
+    instagramUrl: 'https://instagram.com/ushaswi_014/reels',
+    items: fallbackReels
+  };
+
   return (
-    <section className="section bg-background">
+    <section id="behind-scenes" className="section bg-background">
       <motion.div initial="hidden" animate="visible" variants={containerVariants}>
         <div className="container-custom">
           <div className="section-header">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: prefersReduced ? 0 : 0.5 }}>
               <span className="section-label">Behind the Scenes</span>
-              <h2 className="section-title">Process in Motion</h2>
-              <p className="section-subtitle">Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.</p>
+              <h2 className="section-title">{btsContent.title}</h2>
+              <p className="section-subtitle">{btsContent.subtitle}</p>
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Behind the scenes videos">
-            <motion.div variants={containerVariants} initial="hidden" animate="visible">
-              {behindTheScenes.map((item, index) => (
-                <article key={item.id} className="group glass-card-hover rounded-xl overflow-hidden cursor-pointer" role="listitem">
-                  <motion.div variants={itemVariants} initial="hidden" animate="visible" whileHover="hover">
-                    <div className="relative aspect-video overflow-hidden">
-                      <Image src={item.thumbnail} alt="" fill className="object-cover transition-transform duration-500 ease-out group-hover:scale-105" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" quality={85} loading="lazy" />
-                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                          <Play size={32} className="ml-1" aria-hidden="true" />
-                        </motion.button>
-                      </div>
-                      <div className="absolute bottom-3 right-3 bg-black/80 text-surface text-xs px-2 py-1 rounded font-medium">{item.duration}</div>
-                      <div className="absolute top-3 left-3 bg-primary text-surface text-xs px-2 py-1 rounded font-medium">{item.category}</div>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-display font-semibold text-h4 text-text mb-2 group-hover:text-primary transition-colors duration-200">{item.title}</h3>
-                      <p className="text-sm text-text-muted">{item.description}</p>
-                    </div>
-                  </motion.div>
-                </article>
-              ))}
-            </motion.div>
+          {/* Instagram Reels Style Portrait Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" role="list" aria-label="Instagram Reels videos">
+            {btsContent.items.map((item: any) => (
+              <motion.a 
+                key={item.id} 
+                href={item.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variants={itemVariants}
+                whileHover="hover"
+                className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-lg cursor-pointer"
+                role="listitem"
+              >
+                {/* Thumbnail Image */}
+                <Image 
+                  src={item.thumbnail} 
+                  alt={item.title} 
+                  fill 
+                  className="object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-105" 
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw" 
+                  quality={80} 
+                  loading="lazy" 
+                />
+
+                {/* Dark Vignette Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/20 opacity-80 transition-opacity duration-300 group-hover:opacity-90" />
+
+                {/* Category & Duration Tags */}
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                  <span className="px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded bg-[var(--color-primary)] text-white shadow-sm">
+                    {item.category}
+                  </span>
+                  <span className="text-[10px] bg-black/60 text-white px-1.5 py-0.5 rounded font-medium backdrop-blur-xs">
+                    {item.duration}
+                  </span>
+                </div>
+
+                {/* Hover Play Button (Centered) */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  <div className="w-12 h-12 rounded-full bg-white/25 backdrop-blur-md flex items-center justify-center text-white border border-white/40 shadow-md">
+                    <Play size={20} fill="white" className="ml-0.5" />
+                  </div>
+                </div>
+
+                {/* Content Block (Bottom) */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white pointer-events-none">
+                  <h3 className="font-display font-semibold text-sm leading-tight mb-1 group-hover:text-[var(--color-accent-dark)] transition-colors duration-200">
+                    {item.title}
+                  </h3>
+                  <p className="text-[10px] text-gray-300 line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.a>
+            ))}
           </div>
 
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.6, duration: 0.5 }}>
-            <div className="text-center mt-10">
-              <a href="https://instagram.com/ushaswi_014/reels" target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex">View All Reels on Instagram<Video size={20} className="group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" /></a>
+            <div className="text-center mt-12">
+              <a href={btsContent.instagramUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary inline-flex">
+                View All Reels on Instagram
+                <Video size={20} className="group-hover:translate-x-1 transition-transform duration-200" aria-hidden="true" />
+              </a>
             </div>
           </motion.div>
         </div>

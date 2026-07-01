@@ -1,16 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Instagram, Sparkles, Send, Loader2, Check, MapPin, Phone, Clock } from 'lucide-react';
+import { Mail, Instagram, Sparkles, Send, Loader2, Check, MapPin, Phone, Clock, Twitter, Facebook } from 'lucide-react';
 import { contactFormSchema, type ContactFormInput } from '@/lib/validations';
-import { pageContent } from '@/data/site';
-
-const socialLinks = [
-  { name: 'Instagram', href: 'https://instagram.com/ushaswi_014', icon: Instagram, label: 'Follow on Instagram' },
-];
+import { pageContent as defaultPageContent } from '@/data/site';
+import { useLivePreview } from '@/hooks/useLivePreview';
 
 const commissionInfo = [
   { icon: Sparkles, title: 'Custom Paintings', desc: 'Acrylic, oil, or watercolor commissions tailored to your vision.' },
@@ -21,6 +18,18 @@ const commissionInfo = [
 export function Contact() {
   const prefersReduced = useReducedMotion();
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [pageContent, setPageContent] = useState(defaultPageContent);
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data) setPageContent(data); })
+      .catch(err => console.warn(err));
+  }, []);
+
+  useLivePreview<any>('PORTFOLIO_PREVIEW_UPDATE', (data) => {
+    if (data) setPageContent(data);
+  });
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormInput>({
     resolver: zodResolver(contactFormSchema),
@@ -37,6 +46,27 @@ export function Contact() {
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: prefersReduced ? 0 : 0.1 } } };
   const itemVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] as const } } };
+
+  // Parse social links dynamically from pageContent
+  const displaySocials = pageContent?.contact?.socialLinks?.length > 0
+    ? pageContent.contact.socialLinks.map(s => {
+        const iconMap: Record<string, any> = {
+          instagram: Instagram,
+          email: Mail,
+          twitter: Twitter,
+          facebook: Facebook,
+        };
+        const iconKey = (s.platform || '').toLowerCase();
+        return {
+          name: s.label || s.platform,
+          href: s.url,
+          icon: iconMap[iconKey] || Mail,
+          label: s.label
+        };
+      })
+    : [
+        { name: 'Instagram', href: 'https://instagram.com/ushaswi_014', icon: Instagram, label: 'Follow on Instagram' }
+      ];
 
   return (
     <section id="contact" className="section bg-[var(--color-background)]" suppressHydrationWarning>
@@ -70,11 +100,56 @@ export function Contact() {
                 </div>
               </motion.div>
 
+              {/* Studio Info & Hours */}
+              {pageContent.contact?.studioInfo && (
+                <motion.div variants={itemVariants}>
+                  <div className="mb-10">
+                    <h3 className="font-display font-semibold text-[var(--text-h3)] text-[var(--color-text)] mb-6">Studio Info</h3>
+                    <div className="space-y-4">
+                      {pageContent.contact.studioInfo.address && (
+                        <div className="flex gap-4 p-4 glass-card rounded-xl">
+                          <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0">
+                            <MapPin size={20} className="text-[var(--color-primary)]" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-[var(--color-text)] mb-1">Address</h4>
+                            <p className="text-[var(--text-sm)] text-[var(--color-text-muted)]">{pageContent.contact.studioInfo.address}</p>
+                          </div>
+                        </div>
+                      )}
+                      {pageContent.contact.studioInfo.hours && (
+                        <div className="flex gap-4 p-4 glass-card rounded-xl">
+                          <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0">
+                            <Clock size={20} className="text-[var(--color-primary)]" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-[var(--color-text)] mb-1">Hours</h4>
+                            <p className="text-[var(--text-sm)] text-[var(--color-text-muted)]">{pageContent.contact.studioInfo.hours}</p>
+                          </div>
+                        </div>
+                      )}
+                      {(pageContent.contact.studioInfo.phone || pageContent.contact.studioInfo.email) && (
+                        <div className="flex gap-4 p-4 glass-card rounded-xl">
+                          <div className="w-10 h-10 rounded-lg bg-[var(--color-primary)]/10 flex items-center justify-center flex-shrink-0">
+                            <Phone size={20} className="text-[var(--color-primary)]" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-[var(--color-text)] mb-1">Direct Contact</h4>
+                            {pageContent.contact.studioInfo.phone && <p className="text-[var(--text-sm)] text-[var(--color-text-muted)]">Phone: {pageContent.contact.studioInfo.phone}</p>}
+                            {pageContent.contact.studioInfo.email && <p className="text-[var(--text-sm)] text-[var(--color-text-muted)]">Email: {pageContent.contact.studioInfo.email}</p>}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
               <motion.div variants={itemVariants}>
                 <div className="pt-8 border-t border-[var(--color-border-default)]">
                   <h3 className="font-display font-semibold text-[var(--text-h3)] text-[var(--color-text)] mb-6">Connect</h3>
                   <div className="flex flex-wrap gap-3">
-                    {socialLinks.map((social) => (
+                    {displaySocials.map((social) => (
                       <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 glass-card rounded-xl text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:border-[var(--color-primary)]/30 hover:bg-[var(--color-primary)]/5 transition-all duration-200 group" aria-label={social.label}>
                         <social.icon size={20} className="group-hover:text-[var(--color-primary)] transition-colors" aria-hidden="true" />
                         <span className="font-medium text-[var(--text-sm)]">{social.name}</span>

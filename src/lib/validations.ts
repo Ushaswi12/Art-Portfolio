@@ -114,9 +114,23 @@ export const pageContentSchema = z.object({
   seo: z.object({
     title: z.string(),
     description: z.string(),
-    ogImage: z.string().url(),
-    canonicalUrl: z.string().url(),
+    ogImage: z.string().min(1, 'OG Image is required'),
+    canonicalUrl: z.string().min(1, 'Canonical URL is required'),
     structuredData: z.record(z.unknown()).optional(),
+  }),
+  behindTheScenes: z.object({
+    title: z.string().min(1),
+    subtitle: z.string().min(1),
+    instagramUrl: z.string().min(1),
+    items: z.array(z.object({
+      id: z.string().min(1),
+      title: z.string().min(1),
+      description: z.string().min(1),
+      duration: z.string().min(1),
+      thumbnail: z.string().min(1),
+      category: z.string().min(1),
+      instagramUrl: z.string().min(1),
+    })),
   }),
 });
 

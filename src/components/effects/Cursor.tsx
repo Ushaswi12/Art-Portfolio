@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, createContext, useContext } from 'react';
-import { motion, useMotionValue, useSpring, MotionValue, useReducedMotion } from 'framer-motion';
+import { useEffect, useState, createContext, useContext, useRef, useCallback } from 'react';
+import { motion, useMotionValue, useSpring, MotionValue, useReducedMotion, AnimatePresence } from 'framer-motion';
 
 interface CursorContextValue {
   x: MotionValue<number>;
@@ -16,17 +16,76 @@ interface CursorContextValue {
 
 const CursorContext = createContext<CursorContextValue | null>(null);
 
+/* ── Sparkle particle shape ──────────────────────────────────────────────── */
+const STAR_SVG = (
+  <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 0l1.8 6.5H18l-5 3.7 1.9 6.5L10 13l-4.9 3.7L7 9.2 2 5.5h6.2z" />
+  </svg>
+);
+
+interface Sparkle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  color: string;
+  rotation: number;
+  driftX: number;
+  driftY: number;
+}
+
+const SPARKLE_COLORS = [
+  '#E07A5A', // rose-terracotta
+  '#F7CAC9', // blush pink
+  '#D4A8C7', // dusty lavender
+  '#FFD6D6', // soft pink
+  '#B5838D', // mauve
+  '#F2C4CE', // petal pink
+];
+
+let sparkleId = 0;
+
+/* ── Main Provider ───────────────────────────────────────────────────────── */
 export function CursorProvider({ children }: { children: React.ReactNode }) {
   const prefersReduced = useReducedMotion();
   const [mounted, setMounted] = useState(false);
   const [isVisible, setVisible] = useState(true);
   const [isHovering, setHovering] = useState(false);
   const [isClicking, setClicking] = useState(false);
+  const [sparkles, setSparkles] = useState<Sparkle[]>([]);
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-
   const smoothX = useSpring(x, { stiffness: 400, damping: 35 });
   const smoothY = useSpring(y, { stiffness: 400, damping: 35 });
+
+  // Track last sparkle spawn time to throttle
+  const lastSpawn = useRef(0);
+
+  const spawnSparkle = useCallback((cx: number, cy: number) => {
+    const now = Date.now();
+    if (now - lastSpawn.current < 45) return; // ~22fps throttle
+    lastSpawn.current = now;
+
+    const size = 8 + Math.random() * 10;
+    const sparkle: Sparkle = {
+      id: sparkleId++,
+      x: cx + (Math.random() - 0.5) * 20,
+      y: cy + (Math.random() - 0.5) * 20,
+      size,
+      color: SPARKLE_COLORS[Math.floor(Math.random() * SPARKLE_COLORS.length)],
+      rotation: Math.random() * 360,
+      driftX: (Math.random() - 0.5) * 60,
+      driftY: -30 - Math.random() * 40,
+    };
+
+    setSparkles((prev) => [...prev.slice(-14), sparkle]); // keep at most 15
+
+    // Auto-remove after animation completes
+    setTimeout(() => {
+      setSparkles((prev) => prev.filter((s) => s.id !== sparkle.id));
+    }, 700);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -38,8 +97,8 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
     const handleMove = (e: MouseEvent) => {
       x.set(e.clientX);
       y.set(e.clientY);
+      spawnSparkle(e.clientX, e.clientY);
     };
-
     const handleMouseDown = () => setClicking(true);
     const handleMouseUp = () => setClicking(false);
 
@@ -52,7 +111,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [x, y, prefersReduced, mounted]);
+  }, [x, y, prefersReduced, mounted, spawnSparkle]);
 
   useEffect(() => {
     if (!mounted || prefersReduced || typeof window === 'undefined') return;
@@ -91,6 +150,43 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
+
+      {/* ── Sparkle star trail ─────────────────────────────────────────── */}
+      {!prefersReduced && (
+        <div className="pointer-events-none fixed inset-0 z-[9998]" aria-hidden="true">
+          <AnimatePresence>
+            {sparkles.map((s) => (
+              <motion.span
+                key={s.id}
+                initial={{ opacity: 1, scale: 1, x: s.x, y: s.y, rotate: s.rotation }}
+                animate={{
+                  opacity: 0,
+                  scale: 0.2,
+                  x: s.x + s.driftX,
+                  y: s.y + s.driftY,
+                  rotate: s.rotation + (Math.random() > 0.5 ? 90 : -90),
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.65, ease: 'easeOut' }}
+                style={{
+                  position: 'fixed',
+                  width: s.size,
+                  height: s.size,
+                  color: s.color,
+                  filter: `drop-shadow(0 0 3px ${s.color})`,
+                  top: 0,
+                  left: 0,
+                  pointerEvents: 'none',
+                }}
+              >
+                {STAR_SVG}
+              </motion.span>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* ── Core cursor ring ───────────────────────────────────────────── */}
       {!prefersReduced && isVisible && (
         <CustomCursor
           x={smoothX}
@@ -103,6 +199,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ── Cursor ring ─────────────────────────────────────────────────────────── */
 function CustomCursor({
   x,
   y,
@@ -116,27 +213,45 @@ function CustomCursor({
 }) {
   return (
     <motion.div
+      className="pointer-events-none fixed top-0 left-0 z-[9999]"
       style={{ x, y }}
       animate={{
-        scale: isHovering ? 1.5 : isClicking ? 0.8 : 1,
-        opacity: isHovering ? 0.8 : 1,
+        scale: isHovering ? 1.6 : isClicking ? 0.7 : 1,
+        opacity: isHovering ? 0.85 : 1,
       }}
-      transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+      transition={{ type: 'spring', stiffness: 500, damping: 28 }}
     >
-      <div className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference">
-        <div className="absolute -top-1/2 -left-1/2 w-8 h-8 rounded-full border-2 border-[var(--color-text)] transition-all duration-200" />
-        <div
-          className="absolute -top-1/2 -left-1/2 w-1.5 h-1.5 rounded-full bg-[var(--color-text)] transition-all duration-150"
-          style={{
-            scale: isHovering ? 0 : isClicking ? 1.5 : 1,
-            opacity: isHovering ? 0 : 1,
-          }}
-        />
-      </div>
+      {/* Outer ring — rose-gold tint */}
+      <div
+        className="absolute rounded-full border-2"
+        style={{
+          width: '2rem',
+          height: '2rem',
+          top: '-1rem',
+          left: '-1rem',
+          borderColor: 'var(--color-primary)',
+          boxShadow: '0 0 8px var(--color-primary)',
+          transition: 'border-color 200ms, box-shadow 200ms',
+        }}
+      />
+      {/* Inner dot */}
+      <div
+        className="absolute rounded-full bg-[var(--color-primary)]"
+        style={{
+          width: isHovering ? '0' : '6px',
+          height: isHovering ? '0' : '6px',
+          top: isHovering ? '0' : '-3px',
+          left: isHovering ? '0' : '-3px',
+          opacity: isHovering ? 0 : isClicking ? 1.5 : 1,
+          transition: 'all 150ms ease-out',
+          boxShadow: '0 0 5px var(--color-primary)',
+        }}
+      />
     </motion.div>
   );
 }
 
+/* ── Hook exports ────────────────────────────────────────────────────────── */
 export function useCursor() {
   const context = useContext(CursorContext);
   if (!context) throw new Error('useCursor must be used within CursorProvider');

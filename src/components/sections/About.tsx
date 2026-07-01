@@ -4,9 +4,10 @@ import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { Palette, Brush, Layers, Award, Sparkles, MapPin } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { artistInfo, pageContent } from '@/data/site';
+import { artistInfo as defaultArtistInfo, pageContent as defaultPageContent } from '@/data/site';
+import { useLivePreview } from '@/hooks/useLivePreview';
 
-const stats = [
+const defaultStats = [
   { value: '100+', label: 'Artworks Created', icon: Palette },
   { value: '5+', label: 'Years Creating', icon: Award },
   { value: '8', label: 'Mediums Explored', icon: Layers },
@@ -23,6 +24,7 @@ const mediums = [
 ];
 
 function AboutSkeleton() {
+  const artistInfo = defaultArtistInfo; // Use default for skeleton loading
   return (
     <section id="about" className="section bg-background" aria-hidden="true">
       <div className="container-custom">
@@ -32,10 +34,9 @@ function AboutSkeleton() {
               <span className="section-label">About the Artist</span>
               <h2 className="section-title mb-6">Where Vision Meets Canvas</h2>
               <div className="prose prose-lg max-w-none text-text-muted leading-relaxed mb-8">
-                <p className="mb-6 text-lg">Ushaswi Potlapally is a multidisciplinary artist based in Bangalore, India, whose practice spans painting, sketching, and experimental crafts. With a deep reverence for traditional techniques and a curiosity for contemporary processes, Ushaswi creates work that bridges the gap between heritage and innovation.</p>
-                <p className="mb-6">Her journey began with graphite and charcoal, mastering the fundamentals of value, form, and composition. This foundation later informed her transition into acrylic painting, where she explores vibrant color relationships and expressive brushwork on canvas.</p>
-                <p className="mb-6">In recent years, Ushaswi has expanded her practice to include DIY crafts and miniature sculptures - handmade decor, macrame, pressed flower arrangements, and polymer clay miniatures. Each medium offers a new language for storytelling, allowing her to explore texture, dimension, and the tactile joy of making.</p>
-                <p className="font-medium text-text">Whether working large-scale on canvas or crafting miniature worlds in resin, Ushaswi's work is unified by a commitment to process, materiality, and the quiet meditation found in repetitive handwork.</p>
+                {artistInfo.bio.split('\n\n').map((paragraph, index) => (
+                  <p key={index} className="mb-6">{paragraph}</p>
+                ))}
               </div>
             </div>
           </div>
@@ -44,7 +45,7 @@ function AboutSkeleton() {
             <div className="relative h-full flex items-center justify-center p-8">
               <div className="max-w-[28rem] text-center">
                 <blockquote className="text-xl lg:text-h4 font-light text-text leading-relaxed mb-8 relative">
-                  <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span> Art is not what you see, but what you make others see. <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span>
+                  <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span>
                 </blockquote>
                 <cite className="text-text-muted">- Ushaswi Potlapally, Studio Journal 2024</cite>
               </div>
@@ -59,14 +60,54 @@ function AboutSkeleton() {
 export function About() {
   const [mounted, setMounted] = useState(false);
   const prefersReduced = useReducedMotion();
+  const [artistInfo, setArtistInfo] = useState(defaultArtistInfo);
+  const [pageContent, setPageContent] = useState(defaultPageContent);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    fetch('/api/artist-info')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data) setArtistInfo(data); })
+      .catch(err => console.warn(err));
+
+    fetch('/api/content')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data) setPageContent(data); })
+      .catch(err => console.warn(err));
+  }, []);
+
+  useLivePreview<any>('ARTIST_INFO_PREVIEW_UPDATE', (data) => {
+    if (data) setArtistInfo(data);
+  });
+
+  useLivePreview<any>('PORTFOLIO_PREVIEW_UPDATE', (data) => {
+    if (data) setPageContent(data);
+  });
 
   const containerVariants = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: prefersReduced ? 0 : 0.12 } } };
   const itemVariants = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0, transition: { duration: prefersReduced ? 0 : 0.6, ease: [0.16, 1, 0.3, 1] as const } } };
   const statVariants = { hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1, transition: { duration: prefersReduced ? 0 : 0.5, ease: [0.16, 1, 0.3, 1] as const } } };
 
   if (!mounted) return <AboutSkeleton />;
+
+  // Map icon strings to Lucide components dynamically
+  const displayStats = pageContent?.about?.stats?.length > 0
+    ? pageContent.about.stats.map(s => {
+        const iconMap: Record<string, any> = {
+          palette: Palette,
+          award: Award,
+          layers: Layers,
+          gallery: MapPin,
+          map: MapPin,
+        };
+        const iconKey = (s.icon || '').toLowerCase();
+        return {
+          value: s.value,
+          label: s.label,
+          icon: iconMap[iconKey] || Palette,
+        };
+      })
+    : defaultStats;
 
   return (
     <section id="about" className="section bg-background">
@@ -82,10 +123,14 @@ export function About() {
 
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.5 }}>
                       <div className="prose prose-lg max-w-none text-text-muted leading-relaxed mb-8">
-                        <p className="mb-6 text-lg">{artistInfo.bio.split('\n\n')[0]}</p>
-                        <p className="mb-6">{artistInfo.bio.split('\n\n')[1]}</p>
-                        <p className="mb-6">{artistInfo.bio.split('\n\n')[2]}</p>
-                        <p className="font-medium text-text">{artistInfo.bio.split('\n\n')[3]}</p>
+                        {artistInfo.bio.split('\n\n').map((paragraph, index, arr) => (
+                          <p 
+                            key={index} 
+                            className={`mb-6 ${index === 0 ? 'text-lg' : ''} ${index === arr.length - 1 ? 'font-medium text-text' : ''}`}
+                          >
+                            {paragraph}
+                          </p>
+                        ))}
                       </div>
                     </motion.div>
 
@@ -93,7 +138,7 @@ export function About() {
                       <div className="grid grid-cols-2 gap-4 mb-10">
                         {mediums.map((medium, index) => (
                           <motion.div key={medium.name} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.4 + index * 0.08, duration: 0.4 }}>
-                            <div className="p-5 glass-card rounded-xl group hover:border-primary/30 transition-all duration-20200">
+                            <div className="p-5 glass-card rounded-xl group hover:border-primary/30 transition-all duration-200">
                               <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
                                 <medium.icon size={22} className="text-primary" aria-hidden="true" />
                               </div>
@@ -107,7 +152,7 @@ export function About() {
 
                     <motion.div variants={containerVariants} initial="hidden" animate="visible">
                       <div className="grid grid-cols-2 gap-6">
-                        {stats.map((stat, index) => (
+                        {displayStats.map((stat, index) => (
                           <motion.div key={stat.label} variants={statVariants} custom={index}>
                             <div className="text-center p-6 glass-card rounded-xl">
                               <div className="w-12 h-12 mx-auto mb-4 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -133,13 +178,13 @@ export function About() {
                         <blockquote className="text-xl lg:text-h4 font-light text-text leading-relaxed mb-8 relative">
                           <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span>
                         </blockquote>
-                        <cite className="text-text-muted">- Ushaswi Potlapally, Studio Journal 2024</cite>
+                        <cite className="text-text-muted">- {artistInfo.name}, Studio Journal</cite>
                       </div>
                     </div>
 
                     <div className="absolute bottom-6 left-6 right-6 flex flex-wrap gap-3 justify-center">
                       {['Acrylic', 'Watercolor', 'Graphite', 'Charcoal', 'Macrame', 'Polymer Clay', 'Resin', 'Ceramics'].map((tag) => (
-                        <span key={tag} className="px-3 py-1.5 text-xs font-medium bg-surface/50 backdrop-blur-sm border border-border rounded-full text-text-muted hover:text-text hover:border-border-strong transition-all duration200">{tag}</span>
+                        <span key={tag} className="px-3 py-1.5 text-xs font-medium bg-surface/50 backdrop-blur-sm border border-border rounded-full text-text-muted hover:text-text hover:border-border-strong transition-all duration-200">{tag}</span>
                       ))}
                     </div>
                   </div>
@@ -159,6 +204,41 @@ export function About() {
                 </div>
               </motion.div>
             </div>
+
+            {/* Historical Journey Timeline Section */}
+            {pageContent.about.timeline && pageContent.about.timeline.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 30 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="mt-24 pt-12 border-t border-[var(--color-border-default)]"
+              >
+                <div className="text-center mb-16">
+                  <span className="section-label">Journey & History</span>
+                  <h3 className="section-title">Milestones Timeline</h3>
+                  <p className="section-subtitle max-w-[32rem] mx-auto">A brief look into my artistic path and key moments.</p>
+                </div>
+                <div className="relative max-w-[42rem] mx-auto pl-8 border-l border-[var(--color-border-default)]">
+                  {pageContent.about.timeline.map((event, index) => (
+                    <div key={index} className="relative mb-12 last:mb-0">
+                      {/* Timeline dot */}
+                      <div className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full border-4 border-[var(--color-background)] bg-[var(--color-primary)] shadow-md" />
+                      <div className="glass-card p-6 rounded-2xl hover:border-[var(--color-primary)]/30 transition-all duration-200">
+                        <span className="text-[var(--text-xs)] text-[var(--color-primary)] font-bold uppercase tracking-wider">
+                          {event.year} • {event.category}
+                        </span>
+                        <h4 className="font-display font-semibold text-xl text-[var(--color-text)] mt-1 mb-2">
+                          {event.title}
+                        </h4>
+                        <p className="text-[var(--color-text-muted)] text-sm leading-relaxed">
+                          {event.description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </motion.div>

@@ -92,6 +92,24 @@ export interface PageContent {
   about: AboutContent;
   contact: ContactContent;
   seo: SEOData;
+  behindTheScenes: BehindTheScenesContent;
+}
+
+export interface BehindTheScenesContent {
+  title: string;
+  subtitle: string;
+  instagramUrl: string;
+  items: BehindTheScenesItem[];
+}
+
+export interface BehindTheScenesItem {
+  id: string;
+  title: string;
+  description: string;
+  duration: string;
+  thumbnail: string;
+  category: string;
+  instagramUrl: string;
 }
 
 export interface HeroContent {

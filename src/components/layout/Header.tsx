@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ThemeToggle } from './ThemeToggle';
 import { useMagneticCursor } from '@/components/effects/Cursor';
 import { Menu, X } from 'lucide-react';
+import { useLivePreview } from '@/hooks/useLivePreview';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -15,7 +16,7 @@ const navLinks = [
   { href: '/contact', label: 'Contact' },
 ];
 
-function HeaderInner({ pathname }: { pathname: string }) {
+function HeaderInner({ pathname, artistName }: { pathname: string; artistName: string }) {
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -34,7 +35,7 @@ function HeaderInner({ pathname }: { pathname: string }) {
         height,
         backdropFilter: `blur(${blur}px)`,
         WebkitBackdropFilter: `blur(${blur}px)`,
-        backgroundColor: `rgba(250, 248, 245, ${bgOpacity})`,
+        backgroundColor: `rgba(var(--color-background-rgb), ${bgOpacity})`,
         position: 'fixed',
         top: 0,
         left: 0,
@@ -45,8 +46,8 @@ function HeaderInner({ pathname }: { pathname: string }) {
       }}
     >
       <nav className="container-custom flex items-center justify-between h-full px-4 sm:px-6 lg:px-8" role="banner" aria-label="Main navigation">
-        <Link href="/" className="font-display font-semibold text-xl tracking-tight text-[var(--color-text)]" aria-label="Ushaswi Potlapally Home">
-          Ushaswi Potlapally
+        <Link href="/" className="font-display font-semibold text-xl tracking-tight text-[var(--color-text)]" aria-label={`${artistName} Home`}>
+          {artistName}
         </Link>
 
         <div className="hidden md:flex items-center gap-2">
@@ -106,12 +107,25 @@ function HeaderInner({ pathname }: { pathname: string }) {
 export function Header() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [artistName, setArtistName] = useState('Ushaswi Potlapally');
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+    fetch('/api/artist-info')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data?.name) setArtistName(data.name);
+      })
+      .catch(err => console.warn(err));
+  }, []);
+
+  useLivePreview<{ name: string }>('ARTIST_INFO_PREVIEW_UPDATE', (data) => {
+    if (data?.name) setArtistName(data.name);
+  });
 
   if (!mounted) return <header className="h-20" />;
 
-  return <HeaderInner pathname={pathname} />;
+  return <HeaderInner pathname={pathname} artistName={artistName} />;
 }
 
 function MagneticLink({ href, label, isActive }: { href: string; label: string; isActive: boolean }) {

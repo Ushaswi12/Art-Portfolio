@@ -3,16 +3,28 @@
 import { motion, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { featuredArtworks } from '@/data/artworks';
+import { featuredArtworks as defaultFeatured } from '@/data/artworks';
 import { ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export function FeaturedCollection() {
   const [mounted, setMounted] = useState(false);
   const prefersReduced = useReducedMotion();
+  const [featuredArtworks, setFeaturedArtworks] = useState(defaultFeatured);
 
   useEffect(() => {
     setMounted(true);
+    fetch('/api/artworks')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        const feat = data.filter((a: any) => a.featured === true);
+        if (feat.length > 0) {
+          setFeaturedArtworks(feat);
+        } else if (data.length > 0) {
+          setFeaturedArtworks(data.slice(0, 3));
+        }
+      })
+      .catch(err => console.warn(err));
   }, []);
 
   const containerVariants = {

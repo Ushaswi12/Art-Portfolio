@@ -14,17 +14,15 @@ export function AdminDashboardClient() {
   useEffect(() => { setMounted(true); }, []);
 
   const stats = [
-    { label: 'Total Artworks', value: '16', icon: Image, href: '/admin/artworks', change: '+2 this month' },
-    { label: 'Collections', value: '4', icon: Palette, href: '/admin/collections', change: 'Active' },
-    { label: 'Content Pages', value: '5', icon: FileText, href: '/admin/content', change: 'Up to date' },
-    { label: 'Site Settings', value: '1', icon: Settings, href: '/admin/settings', change: 'Configured' },
+    { label: 'Total Artworks', value: '16', icon: Image, href: '/admin/artworks', change: 'Active' },
+    { label: 'Content Editor', value: 'Live', icon: FileText, href: '/admin/settings', change: 'Up to date' },
+    { label: 'Site Settings', value: 'Configured', icon: Settings, href: '/admin/settings', change: 'Live' },
   ];
 
   const quickActions = [
-    { label: 'Add Artwork', href: '/admin/artworks/new', icon: Plus, primary: true },
+    { label: 'Add Artwork', href: '/admin/artworks', icon: Plus, primary: true },
     { label: 'Manage Artworks', href: '/admin/artworks', icon: Image },
-    { label: 'Manage Collections', href: '/admin/collections', icon: Palette },
-    { label: 'Edit Content', href: '/admin/content', icon: FileText },
+    { label: 'Edit Content', href: '/admin/settings', icon: FileText },
     { label: 'Site Settings', href: '/admin/settings', icon: Settings },
   ];
 
@@ -62,8 +60,6 @@ export function AdminDashboardClient() {
           <nav className="p-4 space-y-2" aria-label="Admin navigation">
             <Link href="/admin/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><LayoutDashboard size={20} />Dashboard</Link>
             <Link href="/admin/artworks" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Image size={20} />Artworks</Link>
-            <Link href="/admin/collections" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Palette size={20} />Collections</Link>
-            <Link href="/admin/content" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><FileText size={20} />Content</Link>
             <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Settings size={20} />Settings</Link>
           </nav>
         </aside>
@@ -75,7 +71,7 @@ export function AdminDashboardClient() {
                 <h1 className="font-display font-semibold text-[var(--text-h1)] text-[var(--color-text)]">Dashboard</h1>
                 <p className="text-[var(--color-text-muted)]">Welcome back. Here's an overview of your portfolio.</p>
               </div>
-              <Link href="/admin/artworks/new" className="btn-primary self-end sm:self-auto"><Plus size={18} />Add Artwork</Link>
+              <Link href="/admin/artworks" className="btn-primary self-end sm:self-auto"><Plus size={18} />Add Artwork</Link>
             </div>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, staggerChildren: 0.1 }}>
@@ -118,12 +114,10 @@ export function AdminDashboardClient() {
         </main>
       </div>
 
-      <aside className="md:hidden fixed inset-y-0 right-0 w-64 bg-[var(--color-surface)] border-l border-[var(--color-border-default)] z-50 transform transition-transform duration-300 {mobileOpen ? 'translate-x-0' : 'translate-x-full'}">
+      <aside className={`md:hidden fixed inset-y-0 right-0 w-64 bg-[var(--color-surface)] border-l border-[var(--color-border-default)] z-50 transform transition-transform duration-300 ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <nav className="pt-20 p-4 space-y-2">
           <Link href="/admin/dashboard" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><LayoutDashboard size={20} />Dashboard</Link>
           <Link href="/admin/artworks" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Image size={20} />Artworks</Link>
-          <Link href="/admin/collections" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Palette size={20} />Collections</Link>
-          <Link href="/admin/content" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><FileText size={20} />Content</Link>
           <Link href="/admin/settings" onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] transition-colors"><Settings size={20} />Settings</Link>
         </nav>
       </aside>

@@ -4,7 +4,6 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { FeaturedCollection } from '@/components/sections/FeaturedCollection';
-import { CreativeJourney } from '@/components/sections/CreativeJourney';
 import { BehindTheScenes } from '@/components/sections/BehindTheScenes';
 import { LatestInstagramWorks } from '@/components/sections/LatestInstagramWorks';
 import { CreativeProcessTimeline } from '@/components/sections/CreativeProcessTimeline';
@@ -19,7 +18,6 @@ export default function Home() {
       <main id="main-content">
         <Hero />
         <FeaturedCollection />
-        <CreativeJourney />
         <BehindTheScenes />
         <LatestInstagramWorks />
         <CreativeProcessTimeline />

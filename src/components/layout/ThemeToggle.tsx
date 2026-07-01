@@ -9,7 +9,7 @@ import { useMagneticCursor } from '@/components/effects/Cursor';
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
-  const { onMouseEnter, onMouseLeave, onMouseDown, onMouseUp } = useMagneticCursor();
+  const magneticCursor = useMagneticCursor();
 
   useEffect(() => setMounted(true), []);
 
@@ -29,7 +29,7 @@ export function ThemeToggle() {
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
       className="btn-icon w-10 h-10 relative overflow-hidden"
       aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
-      {...useMagneticCursor()}
+      {...magneticCursor}
     >
       <motion.div
         whileHover={{ scale: 1.05 }}

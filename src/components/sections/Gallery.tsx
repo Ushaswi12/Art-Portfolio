@@ -3,20 +3,44 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
-import { artworks, categories } from '@/data/artworks';
+import { artworks as defaultArtworks, categories as defaultCategories } from '@/data/artworks';
 import { Search, X, ChevronLeft, ChevronRight, Expand, Download, Filter } from 'lucide-react';
 import { useMagneticCursor } from '@/components/effects/Cursor';
+import type { Artwork } from '@/types';
 
 export function Gallery() {
   const [mounted, setMounted] = useState(false);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [artworks, setArtworks] = useState(defaultArtworks);
+  const [categories, setCategories] = useState(defaultCategories);
   const prefersReduced = useReducedMotion();
   const galleryRef = useRef<HTMLDivElement>(null);
   const magnetic = useMagneticCursor();
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    fetch('/api/artworks')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        if (data && data.length > 0) {
+          setArtworks(data);
+          const activeCats = Array.from(new Set(data.map((a: any) => a.category)));
+          const updatedCats = [
+            { id: 'all', name: 'All Works', slug: 'all', order: 0 },
+            ...activeCats.map((c: any, index) => ({
+              id: c.toLowerCase().replace(/\s+/g, '-'),
+              name: c,
+              slug: c.toLowerCase().replace(/\s+/g, '-'),
+              order: index + 1
+            }))
+          ];
+          setCategories(updatedCats);
+        }
+      })
+      .catch(err => console.warn(err));
+  }, []);
 
   const filteredArtworks = artworks.filter((art) => {
     const matchesCategory = filter === 'all' || art.category.toLowerCase().replace(/\s+/g, '-') === filter;
@@ -137,6 +161,7 @@ export function Gallery() {
         {selected && (
           <Lightbox
             artId={selected}
+            artworks={artworks}
             onClose={() => setSelected(null)}
             onPrev={() => { const i = filteredArtworks.findIndex(a => a.id === selected!); if (i > 0) setSelected(filteredArtworks[i - 1].id); }}
             onNext={() => { const i = filteredArtworks.findIndex(a => a.id === selected!); if (i < filteredArtworks.length - 1) setSelected(filteredArtworks[i + 1].id); }}
@@ -148,7 +173,7 @@ export function Gallery() {
   );
 }
 
-function Lightbox({ artId, onClose, onPrev, onNext, prefersReduced }: { artId: string; onClose: () => void; onPrev: () => void; onNext: () => void; prefersReduced: boolean }) {
+function Lightbox({ artId, artworks, onClose, onPrev, onNext, prefersReduced }: { artId: string; artworks: Artwork[]; onClose: () => void; onPrev: () => void; onNext: () => void; prefersReduced: boolean }) {
   const art = artworks.find(a => a.id === artId);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
 

@@ -174,4 +174,65 @@ export const pageContent: PageContent = {
     ],
   },
   seo: siteConfig,
+  behindTheScenes: {
+    title: 'Process in Motion',
+    subtitle: 'Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.',
+    instagramUrl: 'https://instagram.com/ushaswi_014/reels',
+    items: [
+      { 
+        id: 'bts-1', 
+        title: 'Morning Sketch Routine', 
+        description: '30 minutes of graphite before coffee. No reference, just muscle memory and whatever\'s on my mind.', 
+        duration: '1:24', 
+        thumbnail: '/images/sunset-meadow.jpg', 
+        category: 'Process',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      },
+      { 
+        id: 'bts-2', 
+        title: 'Watercolor Wet-on-Wet', 
+        description: 'Letting pigment flow and bloom. The paper does half the work—you just guide the water.', 
+        duration: '2:10', 
+        thumbnail: '/images/pencil-portrait-study.jpg', 
+        category: 'Technique',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      },
+      { 
+        id: 'bts-3', 
+        title: 'Macramé Knot by Knot', 
+        description: 'Hours of repetitive knotting become meditation. Square knots, spiral knots, gathering knots—rhythm in rope.', 
+        duration: '3:45', 
+        thumbnail: '/images/watercolor-dreamscape.jpg', 
+        category: 'Craft',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      },
+      { 
+        id: 'bts-4', 
+        title: 'Miniature Sculpting', 
+        description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', 
+        duration: '2:30', 
+        thumbnail: '/images/diy-macrame-wall.jpg', 
+        category: 'Detail',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      },
+      { 
+        id: 'bts-5', 
+        title: 'Pressed Flower Process', 
+        description: 'Weeks of pressing, careful arrangement, resin mixing. Preserving a moment of spring forever.', 
+        duration: '1:55', 
+        thumbnail: '/images/mini-clay-collection.jpg', 
+        category: 'Nature',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      },
+      { 
+        id: 'bts-6', 
+        title: 'Canvas Layering Time-lapse', 
+        description: 'From stained underpainting to final highlights. Six hours compressed—color building, form emerging.', 
+        duration: '0:45', 
+        thumbnail: '/images/handmade-ceramic-vase.jpg', 
+        category: 'Painting',
+        instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+      }
+    ]
+  }
 };

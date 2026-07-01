@@ -63,35 +63,42 @@ export default function AdminLogin() {
             </motion.div>
           )}
 
-          <div className="relative mb-6">
+          <div className="mb-6">
             <label htmlFor="password" className="label">Password</label>
-            <input
-              {...register('password')}
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              name="password"
-              placeholder="Enter admin password"
-              className={`input-field pr-12 ${errors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
-              autoFocus
-              autoComplete="current-password"
-              disabled={errors.password?.type === 'submit'}
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+            <div className="relative">
+              <input
+                {...register('password')}
+                type={showPassword ? 'text' : 'password'}
+                id="password"
+                name="password"
+                placeholder="Enter admin password"
+                className={`input-field pr-12 ${errors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''}`}
+                autoFocus
+                autoComplete="current-password"
+                disabled={errors.password?.type === 'submit'}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)] cursor-pointer"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                {...magnetic}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={errors.password?.type === 'submit'}
-            className="btn-primary w-full justify-center gap-2"
+            className="btn-primary w-full"
           >
-            <motion.span whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <motion.span 
+              whileHover={{ scale: 1.02 }} 
+              whileTap={{ scale: 0.98 }}
+              className="flex items-center justify-center gap-2 w-full"
+            >
               {errors.password?.type === 'submit' ? (
                 <>
                   <Loader2 size={20} className="animate-spin" aria-hidden="true" />

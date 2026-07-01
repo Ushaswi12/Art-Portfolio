@@ -1,16 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Star, ArrowUpDown, Download, Palette, Image as ImageIcon, X, Save } from 'lucide-react';
-import { artworks, categories } from '@/data/artworks';
+import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Star, ArrowUpDown, Download, Palette, Image as ImageIcon, X, Save, Loader2 } from 'lucide-react';
+import { categories } from '@/data/artworks';
+import type { Artwork } from '@/types';
 
 export function ArtworksManagementClient() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [artworkList, setArtworkList] = useState(artworks);
+  const [artworkList, setArtworkList] = useState<Artwork[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -21,7 +24,21 @@ export function ArtworksManagementClient() {
   const [imagePreview, setImagePreview] = useState('');
   const [dragActive, setDragActive] = useState(false);
 
-  useEffect(() => { setMounted(true); setArtworkList(artworks); }, []);
+  // Load artworks from the API on mount
+  const fetchArtworks = useCallback(async () => {
+    try {
+      const res = await fetch('/api/artworks');
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data: Artwork[] = await res.json();
+      setArtworkList(data);
+    } catch (err) {
+      console.error('Could not load artworks:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { setMounted(true); fetchArtworks(); }, [fetchArtworks]);
 
   const filteredArtworks = artworkList.filter((art) => {
     const matchesCategory = filter === 'all' || art.category.toLowerCase().replace(/\s+/g, '-') === filter;
@@ -30,6 +47,27 @@ export function ArtworksManagementClient() {
                          art.medium.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const uploadFile = async (file: File) => {
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    try {
+      setSaving(true);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: uploadFormData,
+      });
+      if (!res.ok) throw new Error('Upload failed');
+      const data = await res.json();
+      setImagePreview(data.url);
+      setFormData(prev => ({ ...prev, imageUrl: data.url, thumbUrl: data.url }));
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('Failed to upload image. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault(); e.stopPropagation();
@@ -41,22 +79,18 @@ export function ArtworksManagementClient() {
     e.preventDefault(); e.stopPropagation(); setDragActive(false);
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (event) => { const base64 = event.target?.result as string; setImagePreview(base64); setFormData(prev => ({ ...prev, imageUrl: base64, thumbUrl: base64 })); };
-      reader.readAsDataURL(file);
+      uploadFile(file);
     }
   };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (event) => { const base64 = event.target?.result as string; setImagePreview(base64); setFormData(prev => ({ ...prev, imageUrl: base64, thumbUrl: base64 })); };
-      reader.readAsDataURL(file);
+      uploadFile(file);
     }
   };
 
-  const startEdit = (artwork: typeof artworks[0]) => {
+  const startEdit = (artwork: Artwork) => {
     setEditingId(artwork.id);
     setFormData({ title: artwork.title, category: artwork.category, medium: artwork.medium, year: artwork.year,
       dimensions: artwork.dimensions, desc: artwork.desc, artistsNote: artwork.artistsNote || '',
@@ -68,27 +102,73 @@ export function ArtworksManagementClient() {
 
   const saveArtwork = async () => {
     if (!formData.title.trim() || !formData.category) return;
-    const updated = editingId
-      ? artworkList.map(a => a.id === editingId ? { ...a, ...formData, id: editingId } : a)
-      : [...artworkList, { ...formData, id: formData.title.toLowerCase().replace(/\s+/g, '-'), order: artworkList.length + 1 }];
-    setArtworkList(updated);
-    cancelEdit();
+    setSaving(true);
+    try {
+      if (editingId) {
+        // Update existing artwork
+        const res = await fetch(`/api/artworks/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (!res.ok) throw new Error('Update failed');
+        const updated: Artwork = await res.json();
+        setArtworkList(prev => prev.map(a => a.id === editingId ? updated : a));
+      } else {
+        // Create new artwork
+        const res = await fetch('/api/artworks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+        if (!res.ok) throw new Error('Create failed');
+        const created: Artwork = await res.json();
+        setArtworkList(prev => [...prev, created]);
+      }
+      cancelEdit();
+    } catch (err) {
+      console.error('saveArtwork error:', err);
+      alert('Failed to save artwork. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const deleteArtwork = (id: string) => { if (!confirm('Delete this artwork?')) return; setArtworkList(artworkList.filter(a => a.id !== id)); };
+  const deleteArtwork = async (id: string) => {
+    if (!confirm('Delete this artwork? This cannot be undone.')) return;
+    try {
+      const res = await fetch(`/api/artworks/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Delete failed');
+      setArtworkList(prev => prev.filter(a => a.id !== id));
+    } catch (err) {
+      console.error('deleteArtwork error:', err);
+      alert('Failed to delete artwork. Please try again.');
+    }
+  };
 
-  const moveArtwork = (id: string, direction: number) => {
+  const moveArtwork = async (id: string, direction: number) => {
     const index = artworkList.findIndex(a => a.id === id);
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= artworkList.length) return;
-    const updated = [...artworkList]; [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
-    updated.forEach((a, i) => a.order = i + 1);
+    const updated = [...artworkList];
+    [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
+    updated.forEach((a, i) => (a.order = i + 1));
     setArtworkList(updated);
+    // Persist reorder to API
+    try {
+      await fetch('/api/artworks/reorder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: updated.map(a => a.id) }),
+      });
+    } catch (err) {
+      console.error('reorder error:', err);
+    }
   };
 
   const exportData = () => { const data = JSON.stringify(artworkList, null, 2); const blob = new Blob([data], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'artworks.json'; a.click(); URL.revokeObjectURL(url); };
 
-  if (!mounted) {
+  if (!mounted || loading) {
     return (
       <div className="min-h-screen bg-[var(--color-background)] flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-4 border-[var(--color-primary)] border-t-transparent rounded-full" />
@@ -134,7 +214,7 @@ export function ArtworksManagementClient() {
                   </div>
                 </div>
                 <div className="flex gap-4 pt-4 border-t border-[var(--color-border-default)]">
-                  {editingId ? (<><button type="submit" className="btn-primary flex-1 justify-center gap-2"><Save size={20} />Save Changes</button><button type="button" onClick={cancelEdit} className="btn-secondary"><X size={20} />Cancel</button></>) : (<button type="submit" className="btn-primary flex-1 justify-center gap-2"><Plus size={20} />Add Artwork</button>)}
+                  {editingId ? (<><button type="submit" disabled={saving} className="btn-primary flex-1 justify-center gap-2">{saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}{saving ? 'Saving…' : 'Save Changes'}</button><button type="button" onClick={cancelEdit} className="btn-secondary"><X size={20} />Cancel</button></>) : (<button type="submit" disabled={saving} className="btn-primary flex-1 justify-center gap-2">{saving ? <Loader2 size={20} className="animate-spin" /> : <Plus size={20} />}{saving ? 'Adding…' : 'Add Artwork'}</button>)}
                 </div>
               </form>
             </div>

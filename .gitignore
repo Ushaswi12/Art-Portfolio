@@ -46,3 +46,6 @@ Desktop.ini
 # cache
 .cache
 .eslintcache
+
+# uploads
+public/uploads/

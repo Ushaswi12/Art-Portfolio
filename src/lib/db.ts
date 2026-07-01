@@ -29,7 +29,30 @@ async function readJSON<T>(filePath: string, fallback: T): Promise<T> {
 
 async function writeJSON<T>(filePath: string, data: T): Promise<void> {
   await ensureDataDir();
-  await writeFile(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  const content = JSON.stringify(data, null, 2);
+
+  // Write locally (always, fallback for local dev or temporary Vercel function lifetime)
+  try {
+    await writeFile(filePath, content, 'utf-8');
+  } catch (err) {
+    console.warn('[db.ts] Local write skipped (normal for read-only Vercel serverless environment):', err);
+  }
+
+  // Push to GitHub repository if credentials are set
+  if (process.env.GITHUB_TOKEN && process.env.GITHUB_OWNER && process.env.GITHUB_REPO) {
+    const relativePath = filePath
+      .replace(process.cwd(), '')
+      .replace(/^[\\/]+/, '')
+      .replace(/\\/g, '/');
+    try {
+      const { commitToGitHub } = await import('./github');
+      await commitToGitHub(relativePath, content, `CMS Update: ${relativePath}`);
+      console.log(`[db.ts] Committed ${relativePath} successfully to GitHub.`);
+    } catch (err) {
+      console.error(`[db.ts] Failed to commit ${relativePath} to GitHub:`, err);
+      throw err;
+    }
+  }
 }
 
 export const data = {

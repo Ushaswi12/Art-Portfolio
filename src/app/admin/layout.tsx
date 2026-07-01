@@ -1,6 +1,7 @@
-import { getSession, validateAdminPassword, createSession, destroySession, isAdminRoute } from '@/lib/auth';
+import { getSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
+import { AdminLayoutClient } from '@/components/admin/AdminLayoutClient';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
@@ -16,5 +17,5 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   // Protect all other admin routes
   if (!session) redirect('/admin/login');
 
-  return <>{children}</>;
+  return <AdminLayoutClient>{children}</AdminLayoutClient>;
 }
