@@ -9,7 +9,7 @@ My practice spans traditional painting (acrylic, watercolor, oil), detailed grap
 I'm deeply drawn to traditional techniques but love experimenting—mixing gold leaf with acrylic, embedding dried flowers in resin, or combining digital sketching with hand-rendered finals. The boundaries between "fine art" and "craft" feel arbitrary to me; both require vision, skill, and heart.
 
 Every piece I make carries a story—sometimes whispered, sometimes shouted. I create to remember, to process, and to share moments of beauty found in ordinary things.`,
-  statement: `"Art is not what you see, but what you make others see. The canvas is a mirror, and every viewer brings their own reflection." — Ushaswi Potlapally, Studio Journal 2024`,
+  statement: `"Art is not what you see, but what you make others see. The canvas is a mirror, and every viewer brings their own reflection." — Ushaswi Potlapally, Studio Journal, 2024`,
   portrait: '/images/artist-portrait.jpg',
   cv: {
     education: [
@@ -105,8 +105,8 @@ export const siteConfig: SEOData = {
 export const pageContent: PageContent = {
   hero: {
     headline: 'Ushaswi Potlapally',
-    subheadline: 'Artist • Maker • Storyteller',
-    featuredArtworkId: 'sunset-meadow',
+    subheadline: 'Artist • Painter • Storyteller',
+      featuredArtworkId: 'mock_post_0',
     ctaPrimary: { label: 'Explore Gallery', href: '/gallery' },
     ctaSecondary: { label: 'View Featured', href: '/gallery?collection=featured' },
   },
@@ -162,7 +162,7 @@ export const pageContent: PageContent = {
     studioInfo: {
       address: artistInfo.contactInfo.studioAddress || 'Bangalore, India',
       hours: 'By appointment only',
-      phone: '+91 XXXXX XXXXX',
+        phone: 'Available on request',
       email: artistInfo.contactInfo.email,
     },
     socialLinks: artistInfo.socialLinks,

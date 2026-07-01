@@ -21,7 +21,7 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
   const { scrollY } = useScroll();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const y = useTransform(scrollY, [0, 100], [0, -100]);
+
   const opacity = useTransform(scrollY, [0, 50], [1, 0.95]);
   const blur = useTransform(scrollY, [0, 100], [8, 18]);
   const bgOpacity = useTransform(scrollY, [0, 100], [0.5, 0.85]);
@@ -30,7 +30,7 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
   return (
     <motion.header
       style={{
-        y,
+
         opacity,
         height,
         backdropFilter: `blur(${blur}px)`,

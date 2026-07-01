@@ -65,6 +65,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   const spawnSparkle = useCallback((cx: number, cy: number) => {
     const now = Date.now();
     if (now - lastSpawn.current < 45) return; // ~22fps throttle
+    if (cy < 80) return; // skip spawning near top of viewport
     lastSpawn.current = now;
 
     const size = 8 + Math.random() * 10;

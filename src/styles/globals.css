@@ -594,13 +594,9 @@
 
   /* Hero outline text stroke */
   .hero-title-stroke {
-    color: transparent !important;
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.9);
-    text-shadow: 
-      0 0 80px rgba(224, 122, 90, 0.4),
-      0 4px 24px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(135deg, #ffffff 0%, #f7cac9 50%, #ffffff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
+    color: #FFFFFF !important;
+    text-shadow:
+      0 0 80px rgba(224, 122, 90, 0.3),
+      0 4px 24px rgba(0, 0, 0, 0.4);
   }
 }
