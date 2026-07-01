@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Star, ArrowUpDown, Download, Palette, Image as ImageIcon, X, Save, Loader2 } from 'lucide-react';
+import { Plus, Edit, Trash2, Star, GripVertical, Download, Palette, Image as ImageIcon, X, Save, Loader2 } from 'lucide-react';
 import { categories } from '@/data/artworks';
 import type { Artwork } from '@/types';
 
@@ -23,6 +23,9 @@ export function ArtworksManagementClient() {
   });
   const [imagePreview, setImagePreview] = useState('');
   const [dragActive, setDragActive] = useState(false);
+  // Drag-to-reorder state
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const dragItemId = useRef<string | null>(null);
 
   // Load artworks from the API on mount
   const fetchArtworks = useCallback(async () => {
@@ -146,24 +149,38 @@ export function ArtworksManagementClient() {
     }
   };
 
-  const moveArtwork = async (id: string, direction: number) => {
-    const index = artworkList.findIndex(a => a.id === id);
-    const newIndex = index + direction;
-    if (newIndex < 0 || newIndex >= artworkList.length) return;
-    const updated = [...artworkList];
-    [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
-    updated.forEach((a, i) => (a.order = i + 1));
-    setArtworkList(updated);
-    // Persist reorder to API
-    try {
-      await fetch('/api/artworks/reorder', {
+  // --- Drag-to-reorder handlers ---
+  const handleDragStart = (id: string) => {
+    dragItemId.current = id;
+  };
+
+  const handleDragEnter = (id: string) => {
+    if (dragItemId.current && dragItemId.current !== id) setDragOverId(id);
+  };
+
+  const handleDragEnd = async () => {
+    const fromId = dragItemId.current;
+    const toId = dragOverId;
+    dragItemId.current = null;
+    setDragOverId(null);
+    if (!fromId || !toId || fromId === toId) return;
+
+    setArtworkList(prev => {
+      const updated = [...prev];
+      const fromIdx = updated.findIndex(a => a.id === fromId);
+      const toIdx = updated.findIndex(a => a.id === toId);
+      if (fromIdx < 0 || toIdx < 0) return prev;
+      const [moved] = updated.splice(fromIdx, 1);
+      updated.splice(toIdx, 0, moved);
+      updated.forEach((a, i) => (a.order = i + 1));
+      // Persist asynchronously
+      fetch('/api/artworks/reorder', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ids: updated.map(a => a.id) }),
-      });
-    } catch (err) {
-      console.error('reorder error:', err);
-    }
+      }).catch(err => console.error('reorder error:', err));
+      return updated;
+    });
   };
 
   const exportData = () => { const data = JSON.stringify(artworkList, null, 2); const blob = new Blob([data], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'artworks.json'; a.click(); URL.revokeObjectURL(url); };
@@ -283,24 +300,62 @@ export function ArtworksManagementClient() {
           <div className="lg:col-span-1">
             <div className="glass-card p-6 rounded-2xl sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
               <h2 className="font-display font-semibold text-[var(--text-h3)] text-[var(--color-text)] mb-4 flex items-center justify-between">All Artworks<span className="text-[var(--text-xs)] text-[var(--color-text-muted)] bg-[var(--color-surface-muted)] px-2 py-0.5 rounded">{artworkList.length}</span></h2>
-              <div className="space-y-3">
+              <p className="text-[10px] text-[var(--color-text-muted)] mb-3 flex items-center gap-1">
+                <GripVertical size={12} /> Drag cards to reorder
+              </p>
+              <div className="space-y-2">
                 {sortedArtworks.map((artwork, index) => {
                     const isEditing = editingId === artwork.id;
-                    const itemClass = `p-3 rounded-xl transition-all ${isEditing ? 'bg-[var(--color-primary)]/5 border border-[var(--color-primary)]' : 'hover:bg-[var(--color-surface-muted)]'}`;
+                    const isDragOver = dragOverId === artwork.id;
                     return (
-                      <motion.div key={artwork.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 * index }}>
-                        <div className={itemClass}>
-                          <div className="flex items-start gap-3">
-                          <div className="flex flex-col gap-1"><button onClick={() => moveArtwork(artwork.id, -1)} disabled={index === 0} className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] disabled:opacity-30" aria-label="Move up"><ArrowUpDown size={16} /></button><button onClick={() => moveArtwork(artwork.id, 1)} disabled={index === sortedArtworks.length - 1} className="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] disabled:opacity-30" aria-label="Move down"><ArrowUpDown size={16} className="rotate-180" /></button></div>
-                          <div className="relative w-16 h-12 rounded-lg overflow-hidden flex-shrink-0"><img src={artwork.thumbUrl || artwork.imageUrl} alt="" className="w-full h-full object-cover" />{artwork.featured && <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[var(--color-primary)]" title="Featured" />}</div>
-                          <div className="flex-1 min-w-0"><p className="font-medium text-[var(--color-text)] truncate">{artwork.title}</p><p className="text-[var(--text-xs)] text-[var(--color-text-muted)]">{artwork.category} · {artwork.year}</p></div>
-                          <div className="flex items-center gap-1"><button onClick={() => startEdit(artwork)} className="p-1.5 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] rounded" aria-label="Edit"><Edit size={14} /></button><button onClick={() => deleteArtwork(artwork.id)} className="p-1.5 text-[var(--color-text-muted)] hover:text-red-400 rounded" aria-label="Delete"><Trash2 size={14} /></button></div>
+                      <div
+                        key={artwork.id}
+                        draggable
+                        onDragStart={() => handleDragStart(artwork.id)}
+                        onDragEnter={() => handleDragEnter(artwork.id)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDragEnd={handleDragEnd}
+                        className={`p-3 rounded-xl border transition-all cursor-grab active:cursor-grabbing select-none
+                          ${isEditing ? 'bg-[var(--color-primary)]/5 border-[var(--color-primary)]' :
+                            isDragOver ? 'border-[var(--color-primary)]/60 bg-[var(--color-primary)]/5 scale-[1.02] shadow-lg' :
+                            'border-transparent hover:bg-[var(--color-surface-muted)] hover:border-[var(--color-border-default)]'}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          {/* Grip handle */}
+                          <GripVertical size={16} className="text-[var(--color-text-subtle)] flex-shrink-0" />
+                          {/* Thumbnail */}
+                          <div className="relative w-14 h-11 rounded-lg overflow-hidden flex-shrink-0">
+                            <img src={artwork.thumbUrl || artwork.imageUrl} alt="" className="w-full h-full object-cover" />
+                            {artwork.featured && (
+                              <span className="absolute top-0.5 right-0.5">
+                                <Star size={10} className="text-yellow-400 fill-yellow-400" />
+                              </span>
+                            )}
+                          </div>
+                          {/* Info */}
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-[var(--color-text)] text-sm truncate">{artwork.title}</p>
+                            <p className="text-[10px] text-[var(--color-text-muted)]">{artwork.category} · {artwork.year}</p>
+                          </div>
+                          {/* Actions */}
+                          <div className="flex items-center gap-1 flex-shrink-0">
+                            <button onClick={() => startEdit(artwork)} className="p-1.5 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] rounded transition-colors" aria-label="Edit">
+                              <Edit size={13} />
+                            </button>
+                            <button onClick={() => deleteArtwork(artwork.id)} className="p-1.5 text-[var(--color-text-muted)] hover:text-red-400 rounded transition-colors" aria-label="Delete">
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      </motion.div>
                     );
                   })}
-                {artworkList.length === 0 && <div className="text-center py-8 text-[var(--color-text-muted)]"><ImageIcon size={32} className="mx-auto mb-2 opacity-50" /><p>No artworks yet. Add your first piece!</p></div>}
+                {artworkList.length === 0 && (
+                  <div className="text-center py-8 text-[var(--color-text-muted)]">
+                    <ImageIcon size={32} className="mx-auto mb-2 opacity-50" />
+                    <p>No artworks yet. Add your first piece!</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
