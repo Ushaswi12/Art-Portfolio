@@ -30,7 +30,7 @@ function AboutSkeleton() {
       <div className="container-custom">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           <div>
-            <div className="sticky top-24">
+            <div className="space-y-6">
               <span className="section-label">About the Artist</span>
               <h2 className="section-title mb-6">Where Vision Meets Canvas</h2>
               <div className="prose prose-lg max-w-none text-text-muted leading-relaxed mb-8">
@@ -41,14 +41,20 @@ function AboutSkeleton() {
             </div>
           </div>
           <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5" aria-hidden="true" />
-            <div className="relative h-full flex items-center justify-center p-8">
-              <div className="max-w-[28rem] text-center">
-                <blockquote className="text-xl lg:text-h4 font-light text-text leading-relaxed mb-8 relative">
-                  <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-4xl text-primary/50 font-display" aria-hidden="true">"</span>
-                </blockquote>
-                <cite className="text-text-muted">- Ushaswi Potlapally, Studio Journal 2024</cite>
-              </div>
+            <Image
+              src={artistInfo.portrait || '/images/artist-portrait.jpg'}
+              alt={artistInfo.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              quality={85}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden="true" />
+            <div className="absolute bottom-16 left-0 right-0 p-6 sm:p-8">
+              <blockquote className="text-lg font-light text-white leading-relaxed mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
+                <span className="text-3xl text-primary font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-3xl text-primary font-display" aria-hidden="true">"</span>
+              </blockquote>
+              <cite className="text-sm text-white/80 not-italic block font-medium">- {artistInfo.name}, Studio Journal</cite>
             </div>
           </div>
         </div>
