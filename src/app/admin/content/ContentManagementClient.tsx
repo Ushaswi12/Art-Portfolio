@@ -5,20 +5,19 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { pageContentSchema, type PageContentInput } from '@/lib/validations';
-import { Save, Loader2, Check, Image, FileText, Palette, MapPin, Trash2, Plus, Video } from 'lucide-react';
+import { Save, Loader2, Check, Image, FileText, Palette, Trash2, Plus, Video } from 'lucide-react';
 import { pageContent } from '@/data/site';
 
 const sectionTabs = [
   { id: 'hero', label: 'Hero Section', icon: Image },
   { id: 'about', label: 'About Page', icon: FileText },
   { id: 'bts', label: 'Behind the Scenes', icon: Video },
-  { id: 'contact', label: 'Contact Page', icon: MapPin },
   { id: 'seo', label: 'SEO tags', icon: Palette },
 ] as const;
 
 export function ContentManagementClient() {
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<'hero' | 'about' | 'bts' | 'contact' | 'seo'>('hero');
+  const [activeTab, setActiveTab] = useState<'hero' | 'about' | 'bts' | 'seo'>('hero');
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
 
   const { register, handleSubmit, watch, setValue, reset, formState: { errors } } = useForm<PageContentInput>({
@@ -395,86 +394,6 @@ export function ContentManagementClient() {
                 </motion.div>
               )}
 
-              {activeTab === 'contact' && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
-                  <div>
-                    <h2 className="font-display font-semibold text-[var(--text-h3)] text-[var(--color-text)] mb-2">Contact Section</h2>
-                    <p className="text-[var(--color-text-muted)] text-sm mb-4">Edit address, operating hours, direct coordinates, and form links.</p>
-                  </div>
-                  <div>
-                    <label className="label">Studio Address</label>
-                    <input {...register('contact.studioInfo.address')} className="input-field" placeholder="Studio Location / By Appointment" />
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="label">Operating Hours</label>
-                      <input {...register('contact.studioInfo.hours')} className="input-field" placeholder="By appointment only" />
-                    </div>
-                    <div>
-                      <label className="label">Contact Phone</label>
-                      <input {...register('contact.studioInfo.phone')} className="input-field" placeholder="+91 XXXXX XXXXX" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="label">Studio Contact Email</label>
-                    <input {...register('contact.studioInfo.email')} type="email" className="input-field" placeholder="hello@ushaswi.art" />
-                  </div>
-
-                  <div>
-                    <label className="label font-semibold text-[var(--color-text)] mb-3 block">Contact Page Social Links</label>
-                    <div className="space-y-4">
-                      {formValues.contact?.socialLinks?.map((_, index) => (
-                        <div key={index} className="glass-card p-4 rounded-xl border border-[var(--color-border-default)] space-y-3">
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs font-bold text-[var(--color-primary)]">Social Account #{index + 1}</span>
-                            {formValues.contact.socialLinks.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const updated = [...formValues.contact.socialLinks];
-                                  updated.splice(index, 1);
-                                  setValue('contact.socialLinks', updated);
-                                }}
-                                className="text-red-400 hover:text-red-300 text-xs flex items-center gap-1 cursor-pointer"
-                              >
-                                <Trash2 size={12} /> Remove
-                              </button>
-                            )}
-                          </div>
-                          <div className="grid sm:grid-cols-3 gap-3">
-                            <div>
-                              <label className="label">Platform</label>
-                              <select {...register(`contact.socialLinks.${index}.platform`)} className="input-field text-sm">
-                                <option value="instagram">Instagram</option>
-                                <option value="email">Email</option>
-                                <option value="twitter">Twitter</option>
-                                <option value="facebook">Facebook</option>
-                                <option value="linkedin">LinkedIn</option>
-                                <option value="website">Website</option>
-                              </select>
-                            </div>
-                            <div>
-                              <label className="label">URL</label>
-                              <input {...register(`contact.socialLinks.${index}.url`)} className="input-field text-sm" placeholder="https://..." />
-                            </div>
-                            <div>
-                              <label className="label">Label</label>
-                              <input {...register(`contact.socialLinks.${index}.label`)} className="input-field text-sm" placeholder="Follow on Instagram" />
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                      <button
-                        type="button"
-                        onClick={() => setValue('contact.socialLinks', [...(formValues.contact?.socialLinks || []), { platform: 'instagram', url: '', label: '' }])}
-                        className="btn-secondary text-xs cursor-pointer flex items-center gap-1"
-                      >
-                        <Plus size={14} /> Add Social Link
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
 
               {activeTab === 'seo' && (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
