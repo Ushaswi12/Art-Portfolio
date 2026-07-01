@@ -1,65 +1,64 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import Image from 'next/image';
 import { Play, Video } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLivePreview } from '@/hooks/useLivePreview';
 
 const fallbackReels = [
   { 
-    id: 'bts-1', 
+    id: 'DaIRNbihjYZ', 
     title: 'Morning Sketch Routine', 
     description: '30 minutes of graphite before coffee. No reference, just muscle memory and whatever\'s on my mind.', 
     duration: '1:24', 
-    thumbnail: '/images/sunset-meadow.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DaIRNbihjYZ/media/?size=l',
     category: 'Process',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DaIRNbihjYZ/'
   },
   { 
-    id: 'bts-2', 
+    id: 'DaCe5Pyhjgu', 
     title: 'Watercolor Wet-on-Wet', 
     description: 'Letting pigment flow and bloom. The paper does half the work—you just guide the water.', 
     duration: '2:10', 
-    thumbnail: '/images/pencil-portrait-study.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DaCe5Pyhjgu/media/?size=l',
     category: 'Technique',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DaCe5Pyhjgu/'
   },
   { 
-    id: 'bts-3', 
+    id: 'DZ2RgBjhGj3', 
     title: 'Macramé Knot by Knot', 
     description: 'Hours of repetitive knotting become meditation. Square knots, spiral knots, gathering knots—rhythm in rope.', 
     duration: '3:45', 
-    thumbnail: '/images/watercolor-dreamscape.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DZ2RgBjhGj3/media/?size=l',
     category: 'Craft',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DZ2RgBjhGj3/'
   },
   { 
-    id: 'bts-4', 
+    id: 'DZzxCTRBo94', 
     title: 'Miniature Sculpting', 
     description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', 
     duration: '2:30', 
-    thumbnail: '/images/diy-macrame-wall.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DZzxCTRBo94/media/?size=l',
     category: 'Detail',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DZzxCTRBo94/'
   },
   { 
-    id: 'bts-5', 
+    id: 'DZh2rt-BszC', 
     title: 'Pressed Flower Process', 
     description: 'Weeks of pressing, careful arrangement, resin mixing. Preserving a moment of spring forever.', 
     duration: '1:55', 
-    thumbnail: '/images/mini-clay-collection.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DZh2rt-BszC/media/?size=l',
     category: 'Nature',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DZh2rt-BszC/'
   },
   { 
-    id: 'bts-6', 
+    id: 'DZeQbakBE7z', 
     title: 'Canvas Layering Time-lapse', 
     description: 'From stained underpainting to final highlights. Six hours compressed—color building, form emerging.', 
     duration: '0:45', 
-    thumbnail: '/images/handmade-ceramic-vase.jpg', 
+    thumbnail: 'https://www.instagram.com/p/DZeQbakBE7z/media/?size=l',
     category: 'Painting',
-    instagramUrl: 'https://www.instagram.com/ushaswi_014/reels/'
+    instagramUrl: 'https://www.instagram.com/p/DZeQbakBE7z/'
   },
 ];
 
@@ -165,15 +164,18 @@ export function BehindTheScenes() {
                 className="group relative flex-none w-[200px] md:w-[240px] aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-lg cursor-pointer snap-start"
                 role="listitem"
               >
-                {/* Thumbnail Image */}
-                <Image 
+                {/* Thumbnail Image - native img to support Instagram redirect URLs */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={item.thumbnail} 
                   alt={item.title} 
-                  fill 
-                  className="object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-105" 
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw" 
-                  quality={80} 
-                  loading="lazy" 
+                  className="absolute inset-0 w-full h-full object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-105"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    // Fallback to a gradient bg if thumbnail fails to load
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
                 />
 
                 {/* Dark Vignette Overlay */}

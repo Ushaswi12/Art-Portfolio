@@ -70,7 +70,7 @@ function getLocalReels() {
           title: title,
           description: caption,
           duration: duration,
-          thumbnail: `/uploads/${shortcode}.jpg`,
+          thumbnail: `https://www.instagram.com/p/${shortcode}/media/?size=l`,
           category: category,
           instagramUrl: `https://www.instagram.com/p/${shortcode}/`,
         });
