@@ -20,37 +20,32 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
   const prefersReduced = useReducedMotion();
   const { scrollY } = useScroll();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const opacity = useTransform(scrollY, [0, 50], [1, 0.95]);
-  const blur = useTransform(scrollY, [0, 100], [8, 18]);
-  const bgOpacity = useTransform(scrollY, [0, 100], [0.5, 0.85]);
   const height = useTransform(scrollY, [0, 100], [80, 68]);
 
   return (
     <motion.header
-      style={{
-
-        opacity,
-        height,
-        backdropFilter: `blur(${blur}px)`,
-        WebkitBackdropFilter: `blur(${blur}px)`,
-        backgroundColor: `rgba(var(--color-background-rgb), ${bgOpacity})`,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        transition: 'all 300ms ease-out',
-        borderBottom: '1px solid var(--color-border)',
-      }}
+      className={`fixed inset-x-0 top-0 z-50 flex flex-col justify-center transition-all duration-300 ${
+        isScrolled || mobileOpen ? 'glass glass-border-b' : 'bg-transparent'
+      }`}
+      style={{ opacity, height }}
     >
       <nav className="container-custom flex items-center justify-between h-full px-4 sm:px-6 lg:px-8" role="banner" aria-label="Main navigation">
-        <Link href="/" className="font-display font-semibold text-xl tracking-tight text-[var(--color-text)]" aria-label={`${artistName} Home`}>
+        <Link href="/" className="font-display font-semibold text-xl tracking-tight text-[var(--color-text)] logo-drop-shadow hover:scale-102 transition-transform duration-200" aria-label={`${artistName} Home`}>
           {artistName}
         </Link>
 
-        <div className="hidden md:flex items-center gap-2">
+        {/* Center: floating, pill-shaped dock container with modern glassmorphism */}
+        <div className="hidden md:flex items-center gap-1 px-4 py-1.5 rounded-full border border-[rgba(255,255,255,0.15)] bg-[rgba(255,255,255,0.08)] dark:bg-[rgba(0,0,0,0.4)] backdrop-blur-[12px] shadow-[0_8px_32px_0_rgba(0,0,0,0.2)]">
           {navLinks.map((link) => (
             <MagneticLink
               key={link.href}
@@ -59,6 +54,9 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
               isActive={pathname === link.href}
             />
           ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
         </div>
 
@@ -138,17 +136,23 @@ function MagneticLink({ href, label, isActive }: { href: string; label: string; 
       onMouseLeave={onMouseLeave}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
-      className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-        isActive
-          ? 'text-[var(--color-primary)]'
-          : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
-      }`}
+      className="relative px-3.5 py-1.5 text-sm font-medium transition-colors duration-200 inline-block"
     >
-      {label}
+      <motion.span
+        className={`inline-block ${
+          isActive
+            ? 'text-[var(--color-primary)] font-semibold'
+            : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+        }`}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        {label}
+      </motion.span>
       {isActive && (
         <motion.div
           layoutId="active-link"
-          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--color-primary)]"
+          className="absolute bottom-0 left-3.5 right-3.5 h-0.5 bg-[var(--color-primary)]"
           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
         />
       )}

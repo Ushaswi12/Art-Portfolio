@@ -18,6 +18,7 @@ export function Hero() {
   const magnetic = useMagneticCursor();
   const [mounted, setMounted] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(1000);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useLivePreview<any>('PORTFOLIO_PREVIEW_UPDATE', (data) => {
     if (data) setPageContent(data);
@@ -79,7 +80,7 @@ export function Hero() {
           <div className="max-w-[56rem] mx-auto flex flex-col items-center">
             <div className="section-header">
               <span className="section-label">{pageContent.hero.subheadline}</span>
-              <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke">
+              <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke" style={{ textTransform: 'none' }}>
                 {pageContent.hero.headline}
               </h1>
               <p className="section-subtitle max-w-[36rem] mb-10">{pageContent.hero.subheadline}</p>
@@ -109,6 +110,9 @@ export function Hero() {
         className="absolute inset-0 -z-10"
         style={{ y, scale, filter: `blur(${blur}px)` }}
         aria-hidden="true"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: imageLoaded ? 1 : 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
       >
         <Image
           src={featured.imageUrl}
@@ -118,6 +122,7 @@ export function Hero() {
           className="object-cover"
           sizes="100vw"
           quality={95}
+          onLoad={() => setImageLoaded(true)}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/90 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-black/35" />
@@ -147,7 +152,7 @@ export function Hero() {
       <motion.div
         className="container-custom relative z-20 pt-20 pb-12 px-4 sm:px-6 lg:px-8"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: imageLoaded ? 1 : 0 }}
         transition={{ duration: prefersReduced ? 0 : 0.8, staggerChildren: 0.1, delayChildren: 0.2 }}
       >
         <div className="max-w-[56rem] mx-auto flex flex-col items-center">
@@ -158,7 +163,7 @@ export function Hero() {
             transition={{ duration: prefersReduced ? 0 : 0.5 }}
           >
             <span className="section-label">{pageContent.hero.subheadline}</span>
-            <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke">
+            <h1 id="hero-title" className="font-display font-light text-[clamp(3.5rem,8vw,8rem)] text-[var(--color-text)] leading-tight mb-6 hero-title-stroke" style={{ textTransform: 'none' }}>
               {pageContent.hero.headline}
             </h1>
             <p className="section-subtitle max-w-[36rem] mb-10">{pageContent.hero.subheadline}</p>

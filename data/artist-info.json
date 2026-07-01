@@ -1,8 +1,8 @@
 {
-  "name": "Test Artist",
-  "bio": "This is paragraph one of the brand new dynamic bio.\n\nThis is paragraph two of the brand new dynamic bio, demonstrating paragraphs mapping successfully.",
-  "statement": "\"Art is not what you see, but what you make others see. The canvas is a mirror, and every viewer brings their own reflection.\" — Ushaswi Potlapally, Studio Journal 2024",
-  "portrait": "/images/test-portrait.jpg",
+  "name": "Ushaswi Potlapally",
+  "bio": "Art has been my constant companion since childhood—sketching in the margins of notebooks, experimenting with colors from my first watercolor set, and never quite outgrowing the wonder of making something from nothing.\n\nMy practice spans traditional painting (acrylic, watercolor, oil), detailed graphite and charcoal portraiture, and a world of handmade crafts—macramé wall hangings, miniature polymer clay sculptures, pressed flower art, and functional ceramic pieces. Each medium teaches me something different about patience, material, and the joy of tactile creation.\n\nI'm deeply drawn to traditional techniques but love experimenting—mixing gold leaf with acrylic, embedding dried flowers in resin, or combining digital sketching with hand-rendered finals. The boundaries between \"fine art\" and \"craft\" feel arbitrary to me; both require vision, skill, and heart.\n\nEvery piece I make carries a story—sometimes whispered, sometimes shouted. I create to remember, to process, and to share moments of beauty found in ordinary things.",
+  "statement": "\"Art is not what you see, but what you make others see. The canvas is a mirror, and every viewer brings their own reflection.\" — Ushaswi Potlapally, Studio Journal, 2024",
+  "portrait": "/images/artist-portrait.jpg",
   "cv": {
     "education": [
       "Self-taught artist with 5+ years of dedicated practice",
@@ -63,12 +63,18 @@
   "socialLinks": [
     {
       "platform": "instagram",
-      "url": "https://instagram.com/testartist",
-      "label": "Follow TestArtist"
+      "url": "https://instagram.com/ushaswi_014",
+      "label": "Instagram"
+    },
+    {
+      "platform": "email",
+      "url": "mailto:hello@ushaswi.art",
+      "label": "Email"
     }
   ],
   "contactInfo": {
-    "email": "test@example.com",
-    "location": "Test City, Test Country"
+    "email": "hello@ushaswi.art",
+    "location": "Bangalore, India",
+    "studioAddress": "Available for studio visits by appointment"
   }
 }

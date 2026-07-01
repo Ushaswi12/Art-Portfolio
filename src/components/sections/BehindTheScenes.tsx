@@ -72,9 +72,9 @@ function BehindTheScenesSkeleton() {
           <h2 className="section-title">Process in Motion</h2>
           <p className="section-subtitle">Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.</p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
           {fallbackReels.map((item) => (
-            <div key={item.id} className="relative aspect-[9/16] bg-[var(--color-bg-muted)] rounded-2xl overflow-hidden animate-pulse" />
+            <div key={item.id} className="relative flex-none w-[200px] md:w-[240px] aspect-[9/16] bg-[var(--color-bg-muted)] rounded-2xl overflow-hidden animate-pulse" />
           ))}
         </div>
       </div>
@@ -86,6 +86,8 @@ export function BehindTheScenes() {
   const [mounted, setMounted] = useState(false);
   const prefersReduced = useReducedMotion();
   const [pageContent, setPageContent] = useState<any>(null);
+  const [reels, setReels] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => { 
     setMounted(true); 
@@ -93,6 +95,24 @@ export function BehindTheScenes() {
       .then(res => res.ok ? res.json() : null)
       .then(data => { if (data) setPageContent(data); })
       .catch(err => console.warn(err));
+
+    // Fetch live reels from API
+    fetch('/api/instagram')
+      .then(res => {
+        if (!res.ok) throw new Error('API error');
+        return res.json();
+      })
+      .then(data => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setReels(data);
+        }
+      })
+      .catch(err => {
+        console.warn('Instagram API error, using static fallback:', err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   useLivePreview<any>('PORTFOLIO_PREVIEW_UPDATE', (data) => {
@@ -110,14 +130,15 @@ export function BehindTheScenes() {
     hover: { y: -8, transition: { duration: 0.25, ease: 'easeOut' as const } } 
   };
 
-  if (!mounted) return <BehindTheScenesSkeleton />;
+  if (!mounted || loading) return <BehindTheScenesSkeleton />;
 
   const btsContent = pageContent?.behindTheScenes || {
     title: 'Process in Motion',
     subtitle: 'Real-time and time-lapse glimpses into the studio—messy, meditative, and magical moments.',
-    instagramUrl: 'https://instagram.com/ushaswi_014/reels',
-    items: fallbackReels
+    instagramUrl: 'https://instagram.com/ushaswi_014/reels'
   };
+
+  const displayReels = reels.length > 0 ? reels : fallbackReels;
 
   return (
     <section id="behind-scenes" className="section bg-background">
@@ -131,9 +152,9 @@ export function BehindTheScenes() {
             </motion.div>
           </div>
 
-          {/* Instagram Reels Style Portrait Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" role="list" aria-label="Instagram Reels videos">
-            {btsContent.items.map((item: any) => (
+          {/* Instagram Reels Style Portrait Horizontal Scrolling Track */}
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin snap-x snap-mandatory scroll-smooth" role="list" aria-label="Instagram Reels videos">
+            {displayReels.map((item: any) => (
               <motion.a 
                 key={item.id} 
                 href={item.instagramUrl}
@@ -141,7 +162,7 @@ export function BehindTheScenes() {
                 rel="noopener noreferrer"
                 variants={itemVariants}
                 whileHover="hover"
-                className="group relative aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-lg cursor-pointer"
+                className="group relative flex-none w-[200px] md:w-[240px] aspect-[9/16] rounded-2xl overflow-hidden bg-black shadow-lg cursor-pointer snap-start"
                 role="listitem"
               >
                 {/* Thumbnail Image */}
@@ -177,10 +198,10 @@ export function BehindTheScenes() {
 
                 {/* Content Block (Bottom) */}
                 <div className="absolute bottom-0 left-0 right-0 p-3 text-white pointer-events-none">
-                  <h3 className="font-display font-semibold text-sm leading-tight mb-1 group-hover:text-[var(--color-accent-dark)] transition-colors duration-200">
+                  <h3 className="font-display font-semibold text-sm leading-tight mb-1 group-hover:text-[var(--color-accent-dark)] transition-colors duration-200 truncate">
                     {item.title}
                   </h3>
-                  <p className="text-[10px] text-gray-300 line-clamp-2 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-[10px] text-gray-300 line-clamp-2 leading-relaxed opacity-85 group-hover:opacity-100 transition-opacity duration-300">
                     {item.description}
                   </p>
                 </div>

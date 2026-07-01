@@ -183,9 +183,18 @@ function Lightbox({ artId, artworks, onClose, onPrev, onNext, prefersReduced }: 
 
   return (
     <motion.div className="fixed inset-0 bg-black/95 backdrop-blur-xl flex items-center justify-center z-[1000] p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} role="dialog" aria-modal="true" aria-label={`${art.title} - Fullscreen view`}>
-      <motion.div className="relative max-w-[72rem] w-full max-h-[90vh] flex flex-col" initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} onClick={(e) => e.stopPropagation()} transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] as const }}>
-        <button ref={closeBtnRef} onClick={onClose} className="absolute -top-14 right-0 z-10 p-2 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]" aria-label="Close lightbox"><X size={28} /></button>
+      {/* Floating close button icon in the top-right corner */}
+      <button 
+        ref={closeBtnRef} 
+        onClick={onClose} 
+        className="fixed top-6 right-6 z-[1010] p-3 bg-black/60 hover:bg-black/90 backdrop-blur-md border border-white/10 rounded-full text-white transition-all shadow-xl hover:scale-105 active:scale-95" 
+        aria-label="Close lightbox"
+      >
+        <X size={24} />
+      </button>
 
+      <motion.div className="relative max-w-[72rem] w-full max-h-[90vh] flex flex-col" initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} onClick={(e) => e.stopPropagation()} transition={{ duration: prefersReduced ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] as const }}>
+        
         <div className="relative flex-1 flex items-center justify-center overflow-hidden rounded-xl">
           {onPrev && (
             <motion.button onClick={onPrev} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="absolute left-4 z-10 p-3 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors hidden md:flex" aria-label="Previous artwork"><ChevronLeft size={28} /></motion.button>
@@ -205,10 +214,9 @@ function Lightbox({ artId, artworks, onClose, onPrev, onNext, prefersReduced }: 
                 <span>{art.medium}</span><span aria-hidden="true">·</span><time>{art.year}</time><span aria-hidden="true">·</span><span>{art.dimensions}</span>
               </div>
             </div>
-            <div className="flex items-center gap-3"><motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="btn-secondary" onClick={onClose}>Close</motion.button></div>
           </div>
           {art.desc && <motion.p className="mt-6 pt-6 border-t border-[var(--color-border-default)] text-[var(--color-text-muted)] leading-relaxed" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>{art.desc}</motion.p>}
-          {art.artistsNote && <motion.p className="mt-4 pt-4 border-t border-[var(--color-border-default)] text-[var(--text-sm)] text-[var(--color-text-muted)] italic" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>"{art.artistsNote}"</motion.p>}
+          {art.artistsNote && art.artistsNote !== art.desc && <motion.p className="mt-4 pt-4 border-t border-[var(--color-border-default)] text-[var(--text-sm)] text-[var(--color-text-muted)] italic" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>"{art.artistsNote}"</motion.p>}
         </div>
 
         {onPrev && <motion.button onClick={onPrev} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors md:hidden" aria-label="Previous artwork"><ChevronLeft size={28} /></motion.button>}

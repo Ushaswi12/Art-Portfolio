@@ -52,7 +52,7 @@ export function FeaturedCollection() {
               Hand-selected works that define the artistic journey. Each piece tells a story of exploration, technique, and vision.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" role="list" aria-label="Featured artworks">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" role="list" aria-label="Featured artworks">
             {featuredArtworks.map((art) => (
               <article key={art.id} className="glass-card-hover rounded-2xl overflow-hidden" role="listitem">
                 <Link href={`/gallery#${art.id}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]">
@@ -89,7 +89,7 @@ export function FeaturedCollection() {
           </p>
         </motion.div>
 
-        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" variants={containerVariants} initial="hidden" animate="visible" role="list" aria-label="Featured artworks">
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center" variants={containerVariants} initial="hidden" animate="visible" role="list" aria-label="Featured artworks">
           {featuredArtworks.map((art, index) => (
             <motion.article key={art.id} custom={index} variants={itemVariants} initial="hidden" animate="visible" whileHover="hover" className="group glass-card-hover rounded-2xl overflow-hidden cursor-pointer" role="listitem">
               <Link href={`/gallery#${art.id}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]" onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.hash = art.id; } }}>
