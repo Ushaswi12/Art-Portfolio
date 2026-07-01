@@ -205,40 +205,7 @@ export function About() {
               </motion.div>
             </div>
 
-            {/* Historical Journey Timeline Section */}
-            {pageContent.about.timeline && pageContent.about.timeline.length > 0 && (
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ delay: 0.5, duration: 0.6 }}
-                className="mt-24 pt-12 border-t border-[var(--color-border-default)]"
-              >
-                <div className="text-center mb-16">
-                  <span className="section-label">Journey & History</span>
-                  <h3 className="section-title">Milestones Timeline</h3>
-                  <p className="section-subtitle max-w-[32rem] mx-auto">A brief look into my artistic path and key moments.</p>
-                </div>
-                <div className="relative max-w-[42rem] mx-auto pl-8 border-l border-[var(--color-border-default)]">
-                  {pageContent.about.timeline.map((event, index) => (
-                    <div key={index} className="relative mb-12 last:mb-0">
-                      {/* Timeline dot */}
-                      <div className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full border-4 border-[var(--color-background)] bg-[var(--color-primary)] shadow-md" />
-                      <div className="glass-card p-6 rounded-2xl hover:border-[var(--color-primary)]/30 transition-all duration-200">
-                        <span className="text-[var(--text-xs)] text-[var(--color-primary)] font-bold uppercase tracking-wider">
-                          {event.year} • {event.category}
-                        </span>
-                        <h4 className="font-display font-semibold text-xl text-[var(--color-text)] mt-1 mb-2">
-                          {event.title}
-                        </h4>
-                        <p className="text-[var(--color-text-muted)] text-sm leading-relaxed">
-                          {event.description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
+
           </motion.div>
         </div>
       </motion.div>

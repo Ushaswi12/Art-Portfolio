@@ -6,12 +6,12 @@ import { Instagram, ExternalLink } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const latestWorks = [
-  { id: 'latest-1', title: 'Morning Light Study', category: 'Watercolor', image: '/images/latest-1.jpg', likes: 1240, comments: 89, date: '2 days ago' },
-  { id: 'latest-2', title: 'Tiny Mushroom Village', category: 'Mini Crafts', image: '/images/latest-2.jpg', likes: 2100, comments: 156, date: '5 days ago' },
-  { id: 'latest-3', title: 'Peony Progress Shots', category: 'Canvas Paintings', image: '/images/latest-3.jpg', likes: 980, comments: 67, date: '1 week ago' },
-  { id: 'latest-4', title: 'Macramé Wall Hanging', category: 'DIY Crafts', image: '/images/latest-4.jpg', likes: 1650, comments: 112, date: '1 week ago' },
-  { id: 'latest-5', title: 'Charcoal Portrait WIP', category: 'Sketches', image: '/images/latest-5.jpg', likes: 870, comments: 45, date: '2 weeks ago' },
-  { id: 'latest-6', title: 'Resin Flower Coasters', category: 'Handmade Decor', image: '/images/latest-6.jpg', likes: 1320, comments: 78, date: '2 weeks ago' },
+  { id: 'latest-0', title: 'Morning Light Study', category: 'Watercolor', image: '/images/instagram/morning-light-study.jpg', likes: 1240, comments: 89, date: '2 days ago' },
+  { id: 'latest-1', title: 'Tiny Mushroom Village', category: 'Mini Crafts', image: '/images/instagram/tiny-mushroom-village.jpg', likes: 2100, comments: 156, date: '5 days ago' },
+  { id: 'latest-2', title: 'Peony Progress Shots', category: 'Canvas Paintings', image: '/images/instagram/peony-progress-shots.jpg', likes: 980, comments: 67, date: '1 week ago' },
+  { id: 'latest-3', title: 'Macramé Wall Hanging', category: 'DIY Crafts', image: '/images/instagram/macro-me-wall-hanging.jpg', likes: 1650, comments: 112, date: '1 week ago' },
+  { id: 'latest-4', title: 'Charcoal Portrait WIP', category: 'Sketches', image: '/images/instagram/charcoal-portrait-wip.jpg', likes: 870, comments: 45, date: '2 weeks ago' },
+  { id: 'latest-5', title: 'Resin Flower Coasters', category: 'Handmade Decor', image: '/images/instagram/resin-flower-coasters.jpg', likes: 1320, comments: 78, date: '2 weeks ago' },
 ];
 
 export function LatestInstagramWorks() {
