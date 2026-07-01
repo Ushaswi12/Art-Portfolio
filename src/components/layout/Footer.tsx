@@ -114,10 +114,11 @@ export function Footer() {
             <p className="text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               &copy; {currentYear} {artistInfo.name}. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
+            <div className="flex items-center gap-3 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               <span>Crafted with</span>
               <Heart className="text-[var(--color-primary)]" size={14} aria-hidden="true" />
               <span>and attention to detail</span>
+              <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] text-[var(--color-text-muted)] select-none">Made with AI</span>
             </div>
           </div>
         </div>
@@ -223,10 +224,11 @@ export function Footer() {
             <p className="text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               &copy; {currentYear} {artistInfo.name}. All rights reserved.
             </p>
-            <div className="flex items-center gap-4 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
+            <div className="flex items-center gap-3 text-[var(--text-xs)] text-[var(--color-text-subtle)]">
               <span>Crafted with</span>
               <Heart className="text-[var(--color-primary)]" size={14} aria-hidden="true" />
               <span>and attention to detail</span>
+              <span className="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[var(--color-surface-muted)] border border-[var(--color-border-default)] text-[var(--color-text-muted)] select-none">Made with AI</span>
             </div>
           </div>
         </motion.div>
