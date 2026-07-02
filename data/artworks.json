@@ -2299,5 +2299,20 @@
     "featured": false,
     "order": 85,
     "available": true
+  },
+  {
+    "title": "Test Artwork From Admin",
+    "category": "watercolor",
+    "medium": "Watercolor",
+    "year": "2026",
+    "dimensions": "",
+    "desc": "",
+    "artistsNote": "",
+    "featured": false,
+    "imageUrl": "/uploads/1782971862123-test.jpg",
+    "thumbUrl": "/uploads/1782971862123-test.jpg",
+    "instagramUrl": "",
+    "id": "test-artwork-from-admin",
+    "order": 86
   }
 ]
