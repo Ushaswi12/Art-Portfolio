@@ -177,7 +177,7 @@ export function About() {
                 </motion.div>
               </div>
 
-              <motion.div variants={itemVariants} className="lg:sticky lg:top-32 lg:self-start">
+              <motion.div variants={itemVariants} className="lg:sticky lg:top-24 lg:self-start">
                 <div className="relative">
                   <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
                     <Image
