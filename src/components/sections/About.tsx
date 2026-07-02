@@ -175,7 +175,7 @@ export function About() {
                 </motion.div>
               </div>
 
-              <motion.div variants={itemVariants}>
+              <motion.div variants={itemVariants} className="lg:sticky lg:top-28">
                 <div className="relative">
                   <div className="relative aspect-[3/4] rounded-2xl overflow-hidden glass-card">
                     <Image
@@ -190,7 +190,7 @@ export function About() {
                     
                     {/* Floating quote card overlay inside the photo */}
                     <div className="absolute bottom-16 left-0 right-0 p-6 sm:p-8">
-                      <div className="max-w-[28rem] text-left">
+                       <div className="max-w-[28rem] text-left">
                         <blockquote className="text-lg lg:text-xl font-light text-white leading-relaxed mb-4 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                           <span className="text-3xl text-primary font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-3xl text-primary font-display" aria-hidden="true">"</span>
                         </blockquote>
@@ -204,20 +204,6 @@ export function About() {
                       ))}
                     </div>
                   </div>
-
-                  {/* Current Focus card rendered cleanly underneath the photo card */}
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }} 
-                    animate={{ opacity: 1, y: 0 }} 
-                    transition={{ delay: prefersReduced ? 0 : 0.6, duration: 0.5 }}
-                    className="mt-6 p-6 rounded-2xl glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[var(--color-border-default)]"
-                  >
-                    <div className="flex-1">
-                      <p className="text-xs text-[var(--color-primary)] font-semibold uppercase tracking-wider mb-1">Current Focus</p>
-                      <p className="font-display font-semibold text-xl text-[var(--color-text)]">Pressed Flower & Resin</p>
-                      <p className="text-sm text-[var(--color-text-muted)] mt-1">Preserving ephemeral beauty in permanent form</p>
-                    </div>
-                  </motion.div>
                 </div>
               </motion.div>
             </div>
