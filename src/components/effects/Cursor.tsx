@@ -88,12 +88,20 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
     }, 700);
   }, []);
 
+  // Detect mobile/touch-only devices (coarse pointers have no hover states)
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+      const smallScreen = window.innerWidth < 1024;
+      setIsMobile(coarsePointer || smallScreen);
+    }
   }, []);
 
   useEffect(() => {
-    if (!mounted || prefersReduced || typeof window === 'undefined') return;
+    if (!mounted || prefersReduced || isMobile || typeof window === 'undefined') return;
 
     const handleMove = (e: MouseEvent) => {
       x.set(e.clientX);
@@ -112,10 +120,10 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [x, y, prefersReduced, mounted, spawnSparkle]);
+  }, [x, y, prefersReduced, mounted, spawnSparkle, isMobile]);
 
   useEffect(() => {
-    if (!mounted || prefersReduced || typeof window === 'undefined') return;
+    if (!mounted || prefersReduced || isMobile || typeof window === 'undefined') return;
 
     const handleMouseLeave = () => setVisible(false);
     const handleMouseEnter = () => setVisible(true);
@@ -127,9 +135,18 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('mouseenter', handleMouseEnter);
     };
-  }, [prefersReduced, mounted]);
+  }, [prefersReduced, mounted, isMobile]);
 
   if (!mounted) {
+    return (
+      <CursorContext.Provider value={{ x, y, isVisible: false, setVisible: () => {}, isHovering: false, setHovering: () => {}, isClicking: false, setClicking: () => {} }}>
+        {children}
+      </CursorContext.Provider>
+    );
+  }
+
+  // Mobile/tablet viewers get standard pointer controls with no custom cursor elements (prevents tap lag)
+  if (isMobile) {
     return (
       <CursorContext.Provider value={{ x, y, isVisible: false, setVisible: () => {}, isHovering: false, setHovering: () => {}, isClicking: false, setClicking: () => {} }}>
         {children}
