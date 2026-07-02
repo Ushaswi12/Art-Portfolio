@@ -96,24 +96,26 @@ export function About() {
 
   if (!mounted) return <AboutSkeleton />;
 
-  // Map icon strings to Lucide components dynamically
+  // Map icon strings to Lucide components dynamically and filter out empty items
   const displayStats = pageContent?.about?.stats?.length > 0
-    ? pageContent.about.stats.map(s => {
-      const iconMap: Record<string, any> = {
-        palette: Palette,
-        award: Award,
-        layers: Layers,
-        gallery: MapPin,
-        map: MapPin,
-      };
-      const iconKey = (s.icon || '').toLowerCase();
-      return {
-        value: s.value,
-        label: s.label,
-        icon: iconMap[iconKey] || Palette,
-      };
-    })
-    : defaultStats;
+    ? pageContent.about.stats
+        .filter(s => s.value && s.label)
+        .map(s => {
+          const iconMap: Record<string, any> = {
+            palette: Palette,
+            award: Award,
+            layers: Layers,
+            gallery: MapPin,
+            map: MapPin,
+          };
+          const iconKey = (s.icon || '').toLowerCase();
+          return {
+            value: s.value,
+            label: s.label,
+            icon: iconMap[iconKey] || Palette,
+          };
+        })
+    : defaultStats.filter(s => s.value && s.label);
 
   return (
     <section id="about" className="section bg-background">
