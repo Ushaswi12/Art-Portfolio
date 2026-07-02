@@ -69,8 +69,8 @@ export function About() {
   const [artistInfo, setArtistInfo] = useState(defaultArtistInfo);
   const [pageContent, setPageContent] = useState(defaultPageContent);
 
-  useEffect(() => { 
-    setMounted(true); 
+  useEffect(() => {
+    setMounted(true);
     fetch('/api/artist-info')
       .then(res => res.ok ? res.json() : null)
       .then(data => { if (data) setArtistInfo(data); })
@@ -99,20 +99,20 @@ export function About() {
   // Map icon strings to Lucide components dynamically
   const displayStats = pageContent?.about?.stats?.length > 0
     ? pageContent.about.stats.map(s => {
-        const iconMap: Record<string, any> = {
-          palette: Palette,
-          award: Award,
-          layers: Layers,
-          gallery: MapPin,
-          map: MapPin,
-        };
-        const iconKey = (s.icon || '').toLowerCase();
-        return {
-          value: s.value,
-          label: s.label,
-          icon: iconMap[iconKey] || Palette,
-        };
-      })
+      const iconMap: Record<string, any> = {
+        palette: Palette,
+        award: Award,
+        layers: Layers,
+        gallery: MapPin,
+        map: MapPin,
+      };
+      const iconKey = (s.icon || '').toLowerCase();
+      return {
+        value: s.value,
+        label: s.label,
+        icon: iconMap[iconKey] || Palette,
+      };
+    })
     : defaultStats;
 
   return (
@@ -130,8 +130,8 @@ export function About() {
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.2, duration: 0.5 }}>
                       <div className="prose prose-lg max-w-none text-text-muted leading-relaxed mb-8">
                         {artistInfo.bio.split('\n\n').map((paragraph, index, arr) => (
-                          <p 
-                            key={index} 
+                          <p
+                            key={index}
                             className={`mb-6 ${index === 0 ? 'text-lg' : ''} ${index === arr.length - 1 ? 'font-medium text-text' : ''}`}
                           >
                             {paragraph}
@@ -179,7 +179,7 @@ export function About() {
 
               <motion.div variants={itemVariants} className="lg:sticky lg:top-24 lg:self-start w-full max-w-[26rem] mx-auto">
                 <div className="relative">
-                  <div className="relative aspect-[3/2] rounded-2xl overflow-hidden glass-card">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden glass-card">
                     <Image
                       src={artistInfo.portrait || '/images/artist-portrait.jpg'}
                       alt={artistInfo.name}
@@ -189,10 +189,10 @@ export function About() {
                       quality={85}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden="true" />
-                    
+
                     {/* Floating quote card overlay inside the photo */}
                     <div className="absolute bottom-16 left-0 right-0 p-6 sm:p-8">
-                       <div className="max-w-[28rem] text-left">
+                      <div className="max-w-[28rem] text-left">
                         <blockquote className="text-lg lg:text-xl font-light text-white leading-relaxed mb-4 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                           <span className="text-3xl text-primary font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-3xl text-primary font-display" aria-hidden="true">"</span>
                         </blockquote>
