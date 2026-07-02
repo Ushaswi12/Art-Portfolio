@@ -143,8 +143,8 @@ export function Gallery() {
                   priority={index < 4}
                   loading={index < 4 ? undefined : "lazy"}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-background)]/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
-                <div className="absolute inset-0 flex items-end p-5 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" aria-hidden="true" />
+                <div className="absolute inset-0 flex items-end p-5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out">
                   <div className="w-full">
                     <div className="flex items-center justify-end mb-3">
                       <div className="flex gap-2">
@@ -155,8 +155,8 @@ export function Gallery() {
                         <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="p-2 bg-[var(--color-surface)]/80 backdrop-blur-sm rounded-full text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors" aria-label={`Download ${art.title}`}><Download size={18} /></motion.button>
                       </div>
                     </div>
-                    <h3 className="font-display font-semibold text-[var(--text-h4)] text-[var(--color-text)] mb-1">{art.title}</h3>
-                    <p className="text-[var(--text-sm)] text-[var(--color-text-muted)]">{art.medium} · {art.year}</p>
+                    <h3 className="font-display font-semibold text-[var(--text-h4)] text-white mb-1">{art.title}</h3>
+                    <p className="text-[var(--text-sm)] text-gray-300">{art.medium} · {art.year}</p>
                   </div>
                 </div>
               </div>
