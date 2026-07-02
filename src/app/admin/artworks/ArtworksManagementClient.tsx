@@ -203,7 +203,24 @@ export function ArtworksManagementClient() {
           <div className="flex items-center gap-4">
             <button onClick={exportData} className="btn-ghost text-sm"><Download size={16} />Export JSON</button>
             <Link href="/admin/dashboard" className="btn-ghost text-sm"><span className="hidden sm:inline">Dashboard</span></Link>
-            <Link href="/api/auth/logout" className="btn-ghost text-sm">Logout</Link>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/auth/logout', { method: 'POST' });
+                  if (res.ok) {
+                    window.location.href = '/admin/login';
+                  } else {
+                    alert('Logout failed.');
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert('An error occurred during logout.');
+                }
+              }}
+              className="btn-ghost text-sm cursor-pointer"
+            >
+              Logout
+            </button>
           </div>
         </div>
       </header>

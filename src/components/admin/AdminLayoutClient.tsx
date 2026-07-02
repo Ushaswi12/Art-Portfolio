@@ -37,9 +37,25 @@ export function AdminLayoutClient({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline">View Site</span>
               <ArrowRight size={18} />
             </a>
-            <Link href="/api/auth/logout" className="btn-ghost flex items-center justify-center">
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/auth/logout', { method: 'POST' });
+                  if (res.ok) {
+                    window.location.href = '/admin/login';
+                  } else {
+                    alert('Logout failed.');
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert('An error occurred during logout.');
+                }
+              }}
+              className="btn-ghost flex items-center justify-center cursor-pointer"
+              aria-label="Logout"
+            >
               <LogOut size={18} />
-            </Link>
+            </button>
           </div>
         </div>
       </header>

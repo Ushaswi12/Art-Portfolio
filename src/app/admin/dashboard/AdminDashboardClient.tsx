@@ -10,19 +10,30 @@ export function AdminDashboardClient() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [artworkCount, setArtworkCount] = useState<number | null>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+    fetch('/api/artworks')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        if (Array.isArray(data)) {
+          setArtworkCount(data.length);
+        }
+      })
+      .catch(err => console.error(err));
+  }, []);
 
   const stats = [
-    { label: 'Total Artworks', value: '16', icon: Image, href: '/admin/artworks', change: 'Active' },
-    { label: 'Content Editor', value: 'Live', icon: FileText, href: '/admin/settings', change: 'Up to date' },
+    { label: 'Total Artworks', value: artworkCount !== null ? artworkCount.toString() : '...', icon: Image, href: '/admin/artworks', change: 'Active' },
+    { label: 'Content Editor', value: 'Live', icon: FileText, href: '/admin/content', change: 'Up to date' },
     { label: 'Site Settings', value: 'Configured', icon: Settings, href: '/admin/settings', change: 'Live' },
   ];
 
   const quickActions = [
     { label: 'Add Artwork', href: '/admin/artworks', icon: Plus, primary: true },
     { label: 'Manage Artworks', href: '/admin/artworks', icon: Image },
-    { label: 'Edit Content', href: '/admin/settings', icon: FileText },
+    { label: 'Edit Content', href: '/admin/content', icon: FileText },
     { label: 'Site Settings', href: '/admin/settings', icon: Settings },
   ];
 
@@ -32,7 +43,10 @@ export function AdminDashboardClient() {
         <header className="bg-[var(--color-surface)] border-b border-[var(--color-border-default)] sticky top-0 z-40">
           <div className="container-custom flex items-center justify-between h-16">
             <Link href="/admin/dashboard" className="font-display text-xl font-semibold text-[var(--color-text)]">Admin Panel</Link>
-            <div className="flex items-center gap-4"><a href="/" className="btn-ghost" target="_blank">View Site</a><Link href="/api/auth/logout" className="btn-ghost">Logout</Link></div>
+            <div className="flex items-center gap-4">
+              <a href="/" className="btn-ghost" target="_blank">View Site</a>
+              <button className="btn-ghost">Logout</button>
+            </div>
           </div>
         </header>
         <main className="container-custom py-8"><div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">{stats.map(s => <div key={s.label} className="glass-card p-6 rounded-xl"><h3 className="text-3xl font-bold text-[var(--color-text)]">{s.value}</h3><p className="text-[var(--color-text-muted)]">{s.label}</p></div>)}</div></main>
@@ -50,7 +64,25 @@ export function AdminDashboardClient() {
           </div>
           <div className="flex items-center gap-4">
             <a href="/" className="btn-ghost" target="_blank"><span className="hidden sm:inline">View Site</span><ArrowRight size={18} /></a>
-            <Link href="/api/auth/logout" className="btn-ghost"><LogOut size={18} /></Link>
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch('/api/auth/logout', { method: 'POST' });
+                  if (res.ok) {
+                    window.location.href = '/admin/login';
+                  } else {
+                    alert('Logout failed.');
+                  }
+                } catch (err) {
+                  console.error(err);
+                  alert('An error occurred during logout.');
+                }
+              }}
+              className="btn-ghost cursor-pointer flex items-center justify-center"
+              aria-label="Logout"
+            >
+              <LogOut size={18} />
+            </button>
           </div>
         </div>
       </header>
