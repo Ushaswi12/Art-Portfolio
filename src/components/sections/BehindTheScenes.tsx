@@ -34,15 +34,7 @@ const fallbackReels = [
     category: 'Craft',
     instagramUrl: 'https://www.instagram.com/p/DZ2RgBjhGj3/'
   },
-  { 
-    id: 'DZzxCTRBo94', 
-    title: 'Miniature Sculpting', 
-    description: 'Tiny tools, infinite patience. A mushroom cap no bigger than a fingernail, gills carved one by one.', 
-    duration: '2:30', 
-    thumbnail: '/uploads/DZzxCTRBo94.jpg',
-    category: 'Detail',
-    instagramUrl: 'https://www.instagram.com/p/DZzxCTRBo94/'
-  },
+
   { 
     id: 'DZh2rt-BszC', 
     title: 'Pressed Flower Process', 
