@@ -15,6 +15,7 @@ export interface Artwork {
   available?: boolean;
   price?: number;
   instagramUrl?: string;
+  date?: string;
 }
 
 export interface Collection {
