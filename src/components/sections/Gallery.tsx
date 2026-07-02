@@ -101,11 +101,6 @@ export function Gallery() {
   return (
     <section id="gallery" className="section bg-[var(--color-surface)]" suppressHydrationWarning>
       <div className="container-custom" {...magnetic}>
-        <motion.div className="section-header" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: prefersReduced ? 0 : 0.5 }}>
-          <span className="section-label">Gallery</span>
-          <h2 className="section-title">Complete Collection</h2>
-        </motion.div>
-
         <motion.div className="mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: prefersReduced ? 0 : 0.5 }}>
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
             <div>
