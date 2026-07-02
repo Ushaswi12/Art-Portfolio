@@ -205,15 +205,18 @@ export function About() {
                     </div>
                   </div>
 
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.5 }}>
-                    <div className="absolute -bottom-8 -right-8 lg:-bottom-10 lg:-right-10 w-52 h-52 lg:w-72 lg:h-72 rounded-2xl overflow-hidden glass-card shadow-floating">
-                      <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-primary/5" aria-hidden="true" />
-                      <div className="relative h-full flex items-end p-6">
-                        <div>
-                          <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Current Focus</p>
-                          <p className="font-display font-semibold text-h4 text-text">Pressed Flower & Resin</p>
-                          <p className="text-sm text-text-muted mt-1">Preserving ephemeral beauty in permanent form</p>
-                        </div>
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.5 }}
+                    className="hidden lg:block absolute -bottom-8 -right-8 lg:-bottom-10 lg:-right-10 w-52 h-52 lg:w-72 lg:h-72 rounded-2xl overflow-hidden glass-card shadow-floating"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-primary/5" aria-hidden="true" />
+                    <div className="relative h-full flex items-end p-6">
+                      <div>
+                        <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Current Focus</p>
+                        <p className="font-display font-semibold text-h4 text-text">Pressed Flower & Resin</p>
+                        <p className="text-sm text-text-muted mt-1">Preserving ephemeral beauty in permanent form</p>
                       </div>
                     </div>
                   </motion.div>

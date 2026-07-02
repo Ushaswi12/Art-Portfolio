@@ -98,7 +98,7 @@ function HeaderInner({ pathname, artistName }: { pathname: string; artistName: s
 
   return (
     <motion.header
-      className="fixed inset-x-0 top-0 z-50 flex flex-col justify-center transition-all duration-300 glass glass-border-b"
+      className="fixed inset-x-0 top-0 z-[100] flex flex-col justify-center transition-all duration-300 glass glass-border-b"
       style={{ opacity, height }}
     >
       <nav className="container-custom flex items-center justify-between h-full px-4 sm:px-6 lg:px-8" role="banner" aria-label="Main navigation">
