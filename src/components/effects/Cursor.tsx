@@ -200,7 +200,7 @@ export function CursorProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ── Cursor ring ─────────────────────────────────────────────────────────── */
+/* ── Cursor pointer dot ── */
 function CustomCursor({
   x,
   y,
@@ -217,22 +217,22 @@ function CustomCursor({
       className="pointer-events-none fixed top-0 left-0 z-[9999]"
       style={{ x, y }}
       animate={{
-        scale: isHovering ? 1.6 : isClicking ? 0.7 : 1,
+        scale: isHovering ? 1.5 : isClicking ? 0.6 : 1,
         opacity: isHovering ? 0.85 : 1,
       }}
       transition={{ type: 'spring', stiffness: 500, damping: 28 }}
     >
-      {/* Outer ring — small, rose pink */}
+      {/* Solid pointer dot with radial gradient glow */}
       <div
-        className="absolute rounded-full border-2"
+        className="absolute rounded-full"
         style={{
-          width: '1rem',
-          height: '1rem',
-          top: '-0.5rem',
-          left: '-0.5rem',
-          borderColor: 'var(--color-primary)',
-          boxShadow: '0 0 6px var(--color-primary)',
-          transition: 'border-color 200ms, box-shadow 200ms',
+          width: '8px',
+          height: '8px',
+          top: '-4px',
+          left: '-4px',
+          backgroundColor: 'var(--color-primary)',
+          boxShadow: '0 0 10px 4px var(--color-primary), 0 0 20px 8px var(--color-primary-light)',
+          transition: 'background-color 200ms, box-shadow 200ms',
         }}
       />
     </motion.div>
