@@ -1,33 +1,5 @@
 [
   {
-    "id": "paintings-by-ushaswi-bihjyz",
-    "shortcode": "DaIRNbihjYZ",
-    "title": "Paintings by Ushaswi - EDITED",
-    "category": "Paintings",
-    "medium": "Video Reel",
-    "year": "2026",
-    "dimensions": "720 x 1280 px",
-    "imageUrl": "/uploads/DaIRNbihjYZ.jpg",
-    "thumbUrl": "/uploads/DaIRNbihjYZ.jpg",
-    "desc": "తెలుగు అమ్మాయి❤️ ెలుగుఅమ్మాయి ❤️❤️❤️",
-    "artistsNote": "తెలుగు అమ్మాయి❤️ ెలుగుఅమ్మాయి ❤️❤️❤️",
-    "hashtags": [
-      "త",
-      "painting",
-      "teluguammayi",
-      "drawingprocess"
-    ],
-    "instagramShortcode": "DaIRNbihjYZ",
-    "instagramUrl": "https://www.instagram.com/p/DaIRNbihjYZ/",
-    "likes": 3,
-    "comments": 5,
-    "isVideo": true,
-    "date": "2026-06-28",
-    "featured": true,
-    "order": 1,
-    "available": true
-  },
-  {
     "id": "srinivasasridevi-pyhjgu",
     "shortcode": "DaCe5Pyhjgu",
     "title": "SrinivasaSridevi",
@@ -51,6 +23,34 @@
     "comments": 0,
     "isVideo": true,
     "date": "2026-06-26",
+    "featured": true,
+    "order": 1,
+    "available": true
+  },
+  {
+    "id": "paintings-by-ushaswi-bihjyz",
+    "shortcode": "DaIRNbihjYZ",
+    "title": "Paintings by Ushaswi - EDITED",
+    "category": "Paintings",
+    "medium": "Video Reel",
+    "year": "2026",
+    "dimensions": "720 x 1280 px",
+    "imageUrl": "/uploads/DaIRNbihjYZ.jpg",
+    "thumbUrl": "/uploads/DaIRNbihjYZ.jpg",
+    "desc": "తెలుగు అమ్మాయి❤️ ెలుగుఅమ్మాయి ❤️❤️❤️",
+    "artistsNote": "తెలుగు అమ్మాయి❤️ ెలుగుఅమ్మాయి ❤️❤️❤️",
+    "hashtags": [
+      "త",
+      "painting",
+      "teluguammayi",
+      "drawingprocess"
+    ],
+    "instagramShortcode": "DaIRNbihjYZ",
+    "instagramUrl": "https://www.instagram.com/p/DaIRNbihjYZ/",
+    "likes": 3,
+    "comments": 5,
+    "isVideo": true,
+    "date": "2026-06-28",
     "featured": true,
     "order": 2,
     "available": true
