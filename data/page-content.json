@@ -1,7 +1,7 @@
 {
   "hero": {
-    "headline": "Ushaswi Potlapally - Admin Test",
-    "subheadline": "Artist • Painter • Storyteller",
+    "headline": "Ushaswi Potlapally",
+    "subheadline": "Arts • Crafts • Paintings",
     "featuredArtworkId": "",
     "ctaPrimary": {
       "label": "Explore Gallery",
@@ -36,7 +36,7 @@
       "address": "Available for studio visits by appointment",
       "hours": "By appointment only",
       "phone": "+91 XXXXX XXXXX",
-      "email": "hello@ushaswi.art"
+      "email": "ushaswipotlapally@gmail.com"
     },
     "socialLinks": [
       {
@@ -46,7 +46,7 @@
       },
       {
         "platform": "email",
-        "url": "mailto:hello@ushaswi.art",
+        "url": "mailto:ushaswipotlapally@gmail.com",
         "label": "Email"
       }
     ],
