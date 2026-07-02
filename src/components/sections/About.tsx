@@ -179,7 +179,7 @@ export function About() {
 
               <motion.div variants={itemVariants} className="lg:sticky lg:top-24 lg:self-start w-full max-w-[26rem] mx-auto">
                 <div className="relative">
-                  <div className="relative aspect-square rounded-2xl overflow-hidden glass-card">
+                  <div className="relative aspect-[3/2] rounded-2xl overflow-hidden glass-card">
                     <Image
                       src={artistInfo.portrait || '/images/artist-portrait.jpg'}
                       alt={artistInfo.name}
