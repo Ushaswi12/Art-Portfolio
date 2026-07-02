@@ -205,19 +205,17 @@ export function About() {
                     </div>
                   </div>
 
+                  {/* Current Focus card rendered cleanly underneath the photo card */}
                   <motion.div 
                     initial={{ opacity: 0, y: 20 }} 
                     animate={{ opacity: 1, y: 0 }} 
-                    transition={{ delay: prefersReduced ? 0 : 0.8, duration: 0.5 }}
-                    className="hidden lg:block absolute -bottom-8 -right-8 lg:-bottom-10 lg:-right-10 w-52 h-52 lg:w-72 lg:h-72 rounded-2xl overflow-hidden glass-card shadow-floating"
+                    transition={{ delay: prefersReduced ? 0 : 0.6, duration: 0.5 }}
+                    className="mt-6 p-6 rounded-2xl glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-[var(--color-border-default)]"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-primary/5" aria-hidden="true" />
-                    <div className="relative h-full flex items-end p-6">
-                      <div>
-                        <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Current Focus</p>
-                        <p className="font-display font-semibold text-h4 text-text">Pressed Flower & Resin</p>
-                        <p className="text-sm text-text-muted mt-1">Preserving ephemeral beauty in permanent form</p>
-                      </div>
+                    <div className="flex-1">
+                      <p className="text-xs text-[var(--color-primary)] font-semibold uppercase tracking-wider mb-1">Current Focus</p>
+                      <p className="font-display font-semibold text-xl text-[var(--color-text)]">Pressed Flower & Resin</p>
+                      <p className="text-sm text-[var(--color-text-muted)] mt-1">Preserving ephemeral beauty in permanent form</p>
                     </div>
                   </motion.div>
                 </div>
