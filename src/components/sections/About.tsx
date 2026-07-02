@@ -196,7 +196,6 @@ export function About() {
                         <blockquote className="text-lg lg:text-xl font-light text-white leading-relaxed mb-4 relative drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                           <span className="text-3xl text-primary font-display" aria-hidden="true">"</span> {artistInfo.statement} <span className="text-3xl text-primary font-display" aria-hidden="true">"</span>
                         </blockquote>
-                        <cite className="text-sm text-white/80 not-italic block font-medium">- {artistInfo.name}, Studio Journal</cite>
                       </div>
                     </div>
 
